@@ -21,7 +21,7 @@
       <div class="stat-label">Usuarios</div>
     </div>
   </div>
-  <div class="col-sm-6 col-xl-3">
+  <div class="col-sm-6 col-xl-3"> 
     <div class="admin-stat">
       <div class="stat-icon"><i class="bi bi-gem"></i></div>
       <div class="stat-number"><?= $totalProductos ?? 0 ?></div>
