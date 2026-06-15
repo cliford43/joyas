@@ -1,0 +1,405 @@
+# Plan de Implementación: VILUNA Jewelry Store
+
+## Visión General
+
+Implementación en 10 fases del sistema de tienda virtual de joyería fina VILUNA, usando PHP 8+ con arquitectura MVC personalizada, MySQL 8+, Bootstrap 5, AJAX, PHPMailer y Google OAuth. Compatible con Laragon (desarrollo) y GoDaddy Linux (producción).
+
+---
+
+## Tareas
+
+- [x] 1. Fase 1 — Base de Datos
+  - [x] 1.1 Crear el script SQL `database/viluna.sql` con todas las tablas del esquema
+    - Tablas: `usuarios`, `categorias`, `productos`, `producto_imagenes`, `ordenes`, `orden_detalle`, `cupones`, `wishlist`, `newsletter`, `configuracion`
+    - Definir tipos de campo, enums (`rol`, `estado`, `metodo_pago`), valores por defecto
+    - _Requisitos: 1.1, 1.2, 1.3_
+  - [x] 1.2 Agregar claves foráneas e índices al script SQL
+    - FK: `productos.categoria_id`, `producto_imagenes.producto_id`, `ordenes.usuario_id`, `orden_detalle.orden_id`, `orden_detalle.producto_id`
+    - Índices: FULLTEXT en `(nombre, descripcion)`, `idx_productos_activo_destacado`, `idx_ordenes_usuario`, `idx_wishlist_usuario`
+    - _Requisitos: 1.4_
+  - [x] 1.3 Agregar datos de prueba y usuario administrador al script SQL
+    - 7 categorías activas, mínimo 5 productos de ejemplo con imágenes y stocks variados
+    - Usuario admin: `admin@viluna.com` / `Admin123*` con `password_hash()`, `rol = 'admin'`, `verificado = 1`
+    - Filas en `configuracion`: nombre tienda, correo, whatsapp, dirección, redes sociales, datos bancarios
+    - _Requisitos: 1.5_
+  - [ ]* 1.4 Escribir prueba de propiedad para integridad referencial
+    - **Propiedad 1: Integridad Referencial en Base de Datos**
+    - **Valida: Requisito 1.4**
+
+
+- [x] 2. Fase 2 — Arquitectura MVC
+  - [x] 2.1 Inicializar proyecto con Composer y estructura de directorios
+    - `composer.json` con autoload PSR-4: `App\\` → `app/`, `Core\\` → `core/`, `Services\\` → `services/`
+    - Dependencias: `phpmailer/phpmailer`, `league/oauth2-google`, `vlucas/phpdotenv`
+    - Crear toda la estructura de carpetas del proyecto
+    - _Requisitos: 2.1, 2.3_
+  - [x] 2.2 Crear archivos de configuración base
+    - `config/config.example.php` con placeholders para DB, SMTP, OAuth y `APP_ENV`
+    - `.htaccess` raíz redirige a `public/`; `public/.htaccess` con reglas `mod_rewrite`
+    - _Requisitos: 2.2, 2.5_
+  - [x] 2.3 Implementar la clase `Core\Router`
+    - Métodos `get()`, `post()`, soporte de parámetros dinámicos `{param}`
+    - Middleware por ruta: array de nombres `['auth', 'admin', 'csrf']`
+    - Método `dispatch()` que invoca controlador/acción con parámetros extraídos
+    - Ruta fallback → `ErrorController@notFound` (HTTP 404)
+    - _Requisitos: 2.2, 2.4_
+  - [ ]* 2.4 Escribir prueba de propiedad para resolución de rutas
+    - **Propiedad 2: Resolución Correcta de Rutas Registradas**
+    - **Propiedad 3: Rutas Desconocidas Devuelven 404**
+    - **Valida: Requisitos 2.2, 2.4**
+  - [x] 2.5 Implementar el stack de Middleware
+    - `SecurityHeadersMiddleware`: inyecta `X-Content-Type-Options`, `X-Frame-Options`, `Content-Security-Policy`
+    - `SessionMiddleware`: inicia sesión PHP, gestiona regeneración de ID de sesión
+    - `CsrfMiddleware`: genera token en GET, valida en POST, aborta con HTTP 419 si inválido
+    - `AuthMiddleware`: verifica sesión activa, redirige a `/login` si no
+    - `AdminMiddleware`: verifica `rol === 'admin'`, aborta con 403 si no
+    - _Requisitos: 2.2, 13.1, 13.4, 13.6_
+  - [ ]* 2.6 Escribir prueba de propiedad para CSRF y cabeceras de seguridad
+    - **Propiedad 39: Peticiones POST Sin Token CSRF Válido Son Rechazadas**
+    - **Propiedad 42: Cabeceras de Seguridad Presentes en Todas las Respuestas**
+    - **Valida: Requisitos 13.1, 13.6**
+  - [x] 2.7 Implementar `Core\Model`, `Core\Controller` y `public/index.php`
+    - `Core\Model`: instancia PDO compartida, consultas preparadas con parámetros vinculados
+    - `Core\Controller`: método `render($template, $data)` con `htmlspecialchars()` en salidas
+    - `public/index.php`: bootstrap + instancia del Router + `dispatch()`
+    - `routes/web.php`: definición centralizada de todas las rutas del sistema
+    - _Requisitos: 2.1, 2.2, 13.2, 13.3_
+  - [ ]* 2.8 Escribir prueba de propiedad para escape de salida HTML
+    - **Propiedad 40: Salida HTML Escapa Caracteres Especiales**
+    - **Valida: Requisito 13.2**
+  - [x] 2.9 Checkpoint — Verificar que el router resuelve rutas básicas y el autoload funciona
+    - Asegurar que todas las pruebas de las fases anteriores pasan, consultar al usuario si hay dudas.
+
+
+- [x] 3. Fase 3 — Frontend (Identidad Visual y Layouts)
+  - [x] 3.1 Crear los assets de identidad visual VILUNA
+    - `public/assets/images/logo.svg` — logo vectorial con paleta Dorado/Negro
+    - `public/assets/images/logo.png` — PNG con fondo transparente (versión horizontal y vertical)
+    - `public/assets/images/favicon.ico` y `favicon.png` de 32×32 px
+    - _Requisitos: 3.2, 3.4_
+  - [x] 3.2 Crear `public/assets/css/custom.css` con paleta y estilos base
+    - Variables CSS: `--color-gold: #D4AF37`, `--color-black: #111111`, `--color-white: #FFFFFF`
+    - Estilos de tipografía premium, botones primarios/secundarios, badges de descuento y stock
+    - Botón flotante de WhatsApp (posición fija, ícono)
+    - _Requisitos: 3.1, 3.3_
+  - [x] 3.3 Crear layouts PHP y partials del frontend público
+    - `app/views/layouts/layout.php`: head con favicon, meta dinámicos, navbar, footer, Bootstrap 5
+    - `app/views/partials/`: `header.php`, `navbar.php`, `footer.php`, `whatsapp_btn.php`
+    - Footer incluye formulario de newsletter y botón de WhatsApp con número desde `configuracion`
+    - `<link rel="icon">` presente en el `<head>` de `layout.php`
+    - _Requisitos: 3.3, 3.4, 18.1, 19.1_
+  - [x] 3.4 Crear `app/views/layouts/admin_layout.php` y estilos admin
+    - Layout con sidebar de navegación admin, top bar y área de contenido
+    - `public/assets/css/admin.css` con estilos del panel administrativo
+    - _Requisitos: 3.3_
+  - [x] 3.5 Crear vistas de error y `ErrorController`
+    - `app/views/errors/404.php` y `errors/403.php` con diseño VILUNA
+    - `ErrorController` con métodos `notFound()` (HTTP 404) y `forbidden()` (HTTP 403)
+    - _Requisitos: 2.4, 12.1_
+  - [ ]* 3.6 Escribir prueba de propiedad para favicon y newsletter en páginas públicas
+    - **Propiedad 4: Favicon Presente en Todas las Páginas**
+    - **Propiedad 50: Formulario de Newsletter Presente en Todas las Páginas Públicas**
+    - **Valida: Requisitos 3.4, 18.1**
+
+
+- [x] 4. Fase 4 — Autenticación
+  - [x] 4.1 Implementar `UserModel` con todos sus métodos
+    - `findByEmail()`, `create()`, `verify()`, `updateProfile()`, `changePassword()`
+    - `setResetToken()`, `findByResetToken()`, `clearResetToken()`
+    - Hash con `PASSWORD_BCRYPT` en `create()` y `changePassword()`, nunca texto plano
+    - _Requisitos: 9.1, 9.6, 10.1_
+  - [ ]* 4.2 Escribir pruebas de propiedad para hashing y código de verificación
+    - **Propiedad 26: Contraseñas Almacenadas como Hash Bcrypt**
+    - **Propiedad 23: Registro Genera Código de Verificación de 6 Dígitos Numéricos**
+    - **Valida: Requisitos 9.3, 9.6**
+  - [x] 4.3 Implementar `AuthController` — registro tradicional y verificación de correo
+    - `GET|POST /registro`: valida campos, llama `UserModel::create()`, genera código 6 dígitos, envía correo via Mailer
+    - `GET /verificar/{codigo}`: llama `UserModel::verify()`, marca `verificado = true`
+    - Bloquear login si `verificado = false`, ofrecer reenvío de código
+    - Token CSRF en todos los formularios de autenticación
+    - _Requisitos: 9.1, 9.3, 9.4, 9.5_
+  - [ ]* 4.4 Escribir pruebas de propiedad para verificación de cuenta
+    - **Propiedad 24: Verificación de Código Activa la Cuenta**
+    - **Propiedad 25: Usuario No Verificado No Puede Iniciar Sesión**
+    - **Valida: Requisitos 9.4, 9.5**
+  - [x] 4.5 Implementar `AuthController` — login, logout y recuperación de contraseña
+    - `GET|POST /login`: `password_verify()`, regenerar ID de sesión tras login, guardar `id` y `rol` en sesión
+    - `GET /logout`: destruir sesión completa (`session_destroy()`), invalidar cookie de sesión
+    - `GET|POST /recuperar`: genera token `bin2hex(random_bytes(32))`, `reset_token_expires = NOW() + 1h`, envía correo
+    - `GET|POST /restablecer/{token}`: valida token y expiración, actualiza contraseña, invalida token tras primer uso
+    - _Requisitos: 10.1, 10.3, 10.4, 10.5, 10.6, 13.4_
+  - [ ]* 4.6 Escribir pruebas de propiedad para login y tokens de reset
+    - **Propiedad 27: Login con Credenciales Correctas Tiene Éxito**
+    - **Propiedad 28: Token de Restablecimiento con Expiración de 1 Hora**
+    - **Propiedad 29: Token de Restablecimiento Invalidado Tras Primer Uso**
+    - **Propiedad 30: Rutas Protegidas Redirigen Usuarios No Autenticados**
+    - **Propiedad 41: Sesión Destruida al Cerrar Sesión**
+    - **Valida: Requisitos 10.1, 10.3, 10.4, 10.5, 10.6, 11.6, 13.4**
+  - [x] 4.7 Implementar `Services\GoogleOAuth` y `OAuthController`
+    - Configurar `league/oauth2-google` con credenciales desde `config.php`
+    - `GET /auth/google`: redirige a Google con scopes `email profile`
+    - `GET /auth/google/callback`: intercambia código, obtiene perfil, crea o loguea usuario
+    - Usuario OAuth: `password = null`, `verificado = 1` al crear cuenta automáticamente
+    - _Requisitos: 9.2, 10.2_
+  - [x] 4.8 Checkpoint — Verificar flujo completo de autenticación
+    - Asegurar que todas las pruebas de autenticación pasan, consultar al usuario si hay dudas.
+
+
+- [x] 5. Fase 5 — Catálogo y Buscador
+  - [x] 5.1 Implementar `CategoryModel` y métodos de consulta de `ProductModel`
+    - `CategoryModel`: `findAll()`, `findActive()`, `findBySlug()`
+    - `ProductModel`: `findAll()`, `findBySlug()`, `findByCategory()`, `getBestsellers()`, `getNew()`, `getFeatured()`, `getRelated()`
+    - Función `slugify()` para generar slugs únicos (con sufijo numérico si hay colisión)
+    - _Requisitos: 4.2, 4.3, 4.4, 4.5, 6.1, 6.4_
+  - [ ]* 5.2 Escribir pruebas de propiedad para consultas de productos
+    - **Propiedad 5: Categorías Activas Aparecen en Página Principal**
+    - **Propiedad 6: Productos Más Vendidos Ordenados por Cantidad Vendida**
+    - **Propiedad 7: Sección "Nuevos" Solo Contiene Productos Recientes**
+    - **Propiedad 8: Sección "Destacados" Solo Contiene Productos Marcados**
+    - **Propiedad 14: Productos Relacionados Pertenecen a la Misma Categoría y Son Máximo 4**
+    - **Valida: Requisitos 4.2, 4.3, 4.4, 4.5, 4.6, 6.4**
+  - [x] 5.3 Implementar `HomeController` y vista `home/index.php`
+    - Sección hero con imagen y CTA al catálogo
+    - Sección de categorías activas con imagen representativa y enlace
+    - Secciones "Más vendidos", "Nuevos" y "Destacados" usando métodos de `ProductModel`
+    - _Requisitos: 4.1, 4.2, 4.3, 4.4, 4.5_
+  - [x] 5.4 Implementar `ProductModel::search()` con todos los filtros y validaciones
+    - Parámetros: texto libre (FULLTEXT), precio mínimo/máximo, `categoria_id`, criterio de ordenamiento
+    - Validar que `precio_min > precio_max` antes de ejecutar la consulta; retornar error descriptivo
+    - Retornar array vacío (nunca excepción) si no hay resultados
+    - _Requisitos: 5.1, 5.2, 5.3, 5.4, 5.5_
+  - [ ]* 5.5 Escribir pruebas de propiedad para el buscador
+    - **Propiedad 9: Búsqueda Acepta Cualquier Combinación Válida de Filtros**
+    - **Propiedad 10: Resultados de Búsqueda Respetan el Criterio de Ordenamiento**
+    - **Propiedad 11: Rango de Precio Inválido es Rechazado**
+    - **Valida: Requisitos 5.1, 5.3, 5.5**
+  - [x] 5.6 Implementar `SearchController` y `public/assets/js/search.js` (AJAX)
+    - Backend: detecta cabecera `X-Requested-With`, delega a `ProductModel::search()`, retorna JSON con HTML parcial
+    - Frontend: `debounce(300ms)` en cambios de filtros, `fetch()` con cabecera AJAX, actualiza grid sin recargar
+    - Mensaje "no se encontraron productos" cuando el array de resultados es vacío
+    - _Requisitos: 5.1, 5.2, 5.4_
+  - [x] 5.7 Implementar `CatalogController` y vistas `catalog/index.php`, `catalog/category.php`
+    - `GET /catalogo`: listado general con buscador AJAX integrado
+    - `GET /catalogo/{categoria}`: filtrado por categoría con buscador activo
+    - Grid de productos con nombre, imagen principal, precio, botón agregar al carrito
+    - _Requisitos: 4.2, 5.1_
+  - [x] 5.8 Implementar `ProductController` y vista `product/show.php`
+    - Galería de imágenes: imagen principal con miniaturas; zoom al clic/hover
+    - Mostrar: nombre, descripción, precio original, precio con descuento (si `descuento > 0`), stock, categoría
+    - Botón "Agregar al carrito" con atributo `disabled` y etiqueta "Sin stock" si `stock = 0`
+    - Sección "Productos relacionados" (máx. 4 de la misma categoría, excluyendo el actual)
+    - Meta tags dinámicos `<title>`, `<meta name="description">`, `<meta property="og:image">`
+    - _Requisitos: 6.1, 6.2, 6.3, 6.4, 6.5_
+  - [ ]* 5.9 Escribir pruebas de propiedad para vistas de producto
+    - **Propiedad 12: Página de Detalle Contiene Todos los Campos Requeridos**
+    - **Propiedad 13: Producto Sin Stock Deshabilita el Botón de Compra**
+    - **Propiedad 15: Meta Tags SEO Poblados en Páginas de Producto y Categoría**
+    - **Valida: Requisitos 6.1, 6.3, 6.5, 14.2**
+  - [x] 5.10 Checkpoint — Verificar catálogo, buscador AJAX y detalle de producto
+    - Asegurar que todas las pruebas de la fase 5 pasan, consultar al usuario si hay dudas.
+
+
+- [x] 6. Fase 6 — Carrito de Compras
+  - [x] 6.1 Implementar `CartModel` con gestión en sesión
+    - Almacenamiento en `$_SESSION['cart']` — array indexado por `producto_id`
+    - `add($productId, $qty)`: incrementa cantidad si ya existe; crea ítem nuevo si no
+    - `update($productId, $qty)`, `remove($productId)`, `clear()`, `getItems()`
+    - `calculateTotal()`: suma de `(precio - descuento_unitario) * cantidad` por ítem, nunca negativo
+    - Limitar cantidad al rango [1, stock] en `add()` y `update()`
+    - _Requisitos: 7.1, 7.2, 7.3, 7.4, 7.5_
+  - [ ]* 6.2 Escribir pruebas de propiedad para el carrito
+    - **Propiedad 16: Agregar al Carrito Incrementa o Crea Ítem**
+    - **Propiedad 17: Cantidad en Carrito Restringida a [1, stock]**
+    - **Propiedad 18: Eliminar Ítem del Carrito Funciona Correctamente**
+    - **Propiedad 19: Cálculo del Total del Carrito es Correcto**
+    - **Valida: Requisitos 7.1, 7.2, 7.3, 7.4, 7.5**
+  - [x] 6.3 Implementar `CouponModel` y lógica de cupones en carrito
+    - `findByCode()`, `isValid()`: verifica existencia, `activo = true`, `fecha_expiracion > NOW()`, `usos_actuales < limite_usos`
+    - `incrementUsage()`: incrementa `usos_actuales` en 1 al confirmar orden
+    - `CouponController::apply()` (`POST /cupon/aplicar`): valida cupón, almacena porcentaje en sesión
+    - Integración en `CartModel::calculateTotal()` para aplicar `porcentaje` al total
+    - _Requisitos: 7.6, 17.2, 17.3, 17.4_
+  - [ ]* 6.4 Escribir pruebas de propiedad para cupones
+    - **Propiedad 20: Descuento de Cupón Aplicado Correctamente al Total**
+    - **Propiedad 48: Validación de Cupón Verifica las Cuatro Condiciones**
+    - **Propiedad 49: Uso de Cupón Incrementa el Contador en Exactamente 1**
+    - **Valida: Requisitos 7.6, 17.2, 17.4**
+  - [x] 6.5 Implementar `CartController` y vista `cart/index.php`
+    - Endpoints AJAX: `POST /carrito/agregar`, `POST /carrito/actualizar`, `POST /carrito/eliminar`
+    - Vista: tabla de ítems con subtotal por ítem, campo de cupón, totales actualizados en tiempo real
+    - `public/assets/js/cart.js`: actualiza cantidades y totales vía AJAX sin recargar la página
+    - _Requisitos: 7.1, 7.2, 7.3, 7.4, 7.6_
+
+
+- [x] 7. Fase 7 — Checkout y Pagos
+  - [x] 7.1 Implementar `Services\FileUploader`
+    - Validar extensión permitida: `jpg`, `png`, `pdf` (comprobantes); `jpg`, `png` (imágenes de producto)
+    - Validar tipo MIME real con `finfo_file()` independientemente de la extensión declarada
+    - Validar tamaño: máx. 5 MB para comprobantes, máx. 2 MB para imágenes de producto
+    - Generar nombre único con `uniqid() . '_' . time()`; lanzar `InvalidFileException` con mensaje descriptivo si falla
+    - _Requisitos: 8.3, 8.4, 12.6, 13.5_
+  - [ ]* 7.2 Escribir prueba de propiedad para validación de archivos
+    - **Propiedad 21: Validación de Archivos Subidos (MIME + Tamaño)**
+    - **Valida: Requisitos 8.3, 12.6, 13.5**
+  - [x] 7.3 Implementar `OrderModel` con métodos de creación, detalle y stock
+    - `create($userId, $data)`: inserta en `ordenes` con estado `pendiente`
+    - `addDetail($orderId, $productId, $qty, $precio, $descuento)`: inserta en `orden_detalle`
+    - `reduceStock($productId, $qty)`: reduce `productos.stock` (nunca a negativo)
+    - `findByUser($userId)`, `findById($orderId)`, `updateStatus($orderId, $status)`
+    - `getMonthlySales()`: últimos 12 meses, con 0 para meses sin ventas
+    - _Requisitos: 8.5, 11.4, 11.5, 12.3_
+  - [ ]* 7.4 Escribir prueba de propiedad para reducción de stock
+    - **Propiedad 22: Confirmación de Orden Reduce el Stock Correctamente**
+    - **Valida: Requisito 8.5**
+  - [x] 7.5 Implementar `Services\Mailer` con plantillas de correo
+    - Envolver PHPMailer con configuración SMTP desde `config.php`
+    - Plantillas en `app/views/emails/`: `verification.php`, `order_confirmation.php`, `order_status.php`, `password_reset.php`
+    - `try/catch` en todos los envíos: loguear en `storage/logs/mail.log` con timestamp, continuar flujo principal
+    - _Requisitos: 15.1, 15.2, 15.3, 15.4, 15.5_
+  - [ ]* 7.6 Escribir prueba unitaria para el Mailer (mock SMTP)
+    - Verificar que fallos del Mailer registran en log y no interrumpen el flujo principal
+    - **Propiedad 45: Fallo del Mailer Registra Error y No Interrumpe el Flujo**
+    - **Valida: Requisito 15.5**
+  - [x] 7.7 Implementar `CheckoutController` y vistas de checkout
+    - `GET /checkout`: formulario con dirección de entrega y selector de método de pago
+    - Método "Contra entrega": confirma directamente al enviar el formulario
+    - Método "Transferencia bancaria": muestra datos bancarios desde `configuracion`, campo para subir comprobante
+    - `POST /checkout/subir-comprobante`: llama a `FileUploader`, almacena ruta en sesión
+    - `POST /checkout/confirmar`: crea orden, reduce stock, incrementa uso de cupón, envía correo, redirige a confirmación
+    - Vista `checkout/confirmation.php`: número de orden y resumen completo de compra
+    - _Requisitos: 8.1, 8.2, 8.3, 8.5, 8.6_
+  - [x] 7.8 Checkpoint — Verificar flujo completo de checkout con ambos métodos de pago
+    - Asegurar que todas las pruebas de la fase 7 pasan, consultar al usuario si hay dudas.
+
+
+- [x] 8. Fase 8 — Dashboard del Cliente
+  - [x] 8.1 Implementar `ClientController` y vistas del dashboard cliente
+    - `GET /mi-cuenta`: menú lateral con: Mi Perfil, Mis Órdenes, Mi Wishlist
+    - `POST /mi-cuenta/perfil`: actualiza nombre, apellido, teléfono, dirección via `UserModel::updateProfile()`
+    - `POST /mi-cuenta/contrasena`: verifica contraseña actual, actualiza con nuevo hash bcrypt
+    - Todas las rutas protegidas con `AuthMiddleware` — redirige a `/login` si no autenticado
+    - _Requisitos: 11.1, 11.2, 11.3, 11.6_
+  - [x] 8.2 Implementar vistas de historial de órdenes del cliente
+    - `GET /mi-cuenta/ordenes`: lista con número de orden, fecha, estado, método de pago y total
+    - `GET /mi-cuenta/ordenes/{id}`: detalle con productos, cantidades, precios unitarios y estado actual
+    - _Requisitos: 11.4, 11.5_
+  - [x] 8.3 Implementar `WishlistModel` y `WishlistController`
+    - `toggle($userId, $productId)`: agrega si no existe, elimina si ya existe (comportamiento toggle)
+    - `findByUser($userId)`: retorna todos los productos del usuario con datos completos
+    - `exists($userId, $productId)`: booleano para mostrar estado del ícono en catálogo/detalle
+    - `POST /wishlist/toggle`: endpoint AJAX protegido con `AuthMiddleware`
+    - Vista `client/wishlist.php`: muestra productos guardados con opción "Agregar al carrito"
+    - _Requisitos: 16.1, 16.2, 16.3_
+  - [ ]* 8.4 Escribir pruebas de propiedad para wishlist
+    - **Propiedad 46: Wishlist Toggle es Idempotente (Doble Alternancia Restaura Estado)**
+    - **Propiedad 47: Wishlist Muestra Todos los Productos Guardados del Usuario**
+    - **Valida: Requisitos 16.1, 16.2, 16.3**
+
+
+- [x] 9. Fase 9 — Dashboard del Administrador
+  - [x] 9.1 Implementar `Admin\DashboardController` y vista de estadísticas
+    - Estadísticas: total ventas (`SUM(total)` con `estado = 'entregada'`), usuarios registrados, productos activos, top 5 más vendidos
+    - Gráfica de ventas mensuales (últimos 12 meses) usando `OrderModel::getMonthlySales()` + Chart.js
+    - Todas las rutas admin protegidas con `AdminMiddleware`
+    - _Requisitos: 12.1, 12.2, 12.3_
+  - [ ]* 9.2 Escribir pruebas de propiedad para estadísticas del dashboard admin
+    - **Propiedad 31: Rutas Admin Rechazan Usuarios Sin Rol Admin con 403**
+    - **Propiedad 32: Estadísticas del Dashboard Coinciden con Agregados de DB**
+    - **Propiedad 33: Datos de Ventas Mensuales Cubren Exactamente 12 Meses**
+    - **Valida: Requisitos 12.1, 12.2, 12.3**
+  - [x] 9.3 Implementar `Admin\CategoryController` — CRUD de categorías
+    - Listar, crear, editar y cambiar estado activo/inactivo de categorías
+    - Generar slug con `slugify()` y verificar unicidad al crear/editar
+    - _Requisitos: 12.4_
+  - [ ]* 9.4 Escribir prueba de propiedad para CRUD de categorías
+    - **Propiedad 34: CRUD de Categorías es Consistente (Round-Trip)**
+    - **Valida: Requisito 12.4**
+  - [x] 9.5 Implementar `Admin\ProductController` — CRUD de productos con imágenes
+    - Listar, crear, editar, activar/desactivar y marcar como destacado
+    - Subida de hasta 10 imágenes por producto via `FileUploader` (2 MB, JPG/PNG), almacenar en `/uploads/productos/`
+    - Registrar imágenes en `producto_imagenes`; rechazar si ya hay 10 imágenes para ese producto
+    - Generar slug con `slugify()`
+    - _Requisitos: 12.5, 12.6_
+  - [ ]* 9.6 Escribir prueba de propiedad para límite de imágenes de producto
+    - **Propiedad 35: CRUD de Productos Respeta el Límite de 10 Imágenes**
+    - **Valida: Requisito 12.5**
+  - [x] 9.7 Implementar `Admin\OrderController` — gestión de órdenes
+    - Listar órdenes con filtro por estado: pendiente, pagada, en preparación, enviada, entregada, cancelada
+    - Cambiar estado de orden → envía notificación al cliente via Mailer
+    - _Requisitos: 12.7, 12.8, 15.3_
+  - [ ]* 9.8 Escribir prueba de propiedad para filtro de órdenes por estado
+    - **Propiedad 36: Filtro de Órdenes por Estado Retorna Solo Órdenes del Estado Solicitado**
+    - **Valida: Requisito 12.7**
+  - [x] 9.9 Implementar `Admin\PaymentController` — panel de pagos por transferencia
+    - Listar órdenes con `metodo_pago = 'transferencia'`, `comprobante_ruta IS NOT NULL`, `estado = 'pendiente'`
+    - Aprobar: cambia estado a `pagada`, notifica cliente; Rechazar: cambia estado a `cancelada`, notifica cliente
+    - _Requisitos: 12.9, 12.10_
+  - [ ]* 9.10 Escribir pruebas de propiedad para el panel de pagos
+    - **Propiedad 37: Panel de Pagos Lista Solo Comprobantes Pendientes de Revisión**
+    - **Propiedad 38: Aprobación de Comprobante Cambia Estado de Orden a 'pagada'**
+    - **Valida: Requisitos 12.9, 12.10**
+  - [x] 9.11 Implementar `Admin\UserController` — gestión de usuarios
+    - Listar usuarios con rol, estado y fecha de registro
+    - Ver detalle de usuario; activar/desactivar cuenta
+    - _Requisitos: 12.11_
+  - [x] 9.12 Implementar `Admin\CouponController` — CRUD de cupones
+    - Crear cupón: código único, porcentaje de descuento, fecha de expiración, límite de usos
+    - Listar, editar y activar/desactivar cupones
+    - _Requisitos: 17.1_
+  - [x] 9.13 Implementar `Admin\NewsletterController` — visualización de suscriptores
+    - Listar correos suscritos con fecha de suscripción
+    - _Requisitos: 18.1_
+  - [x] 9.14 Implementar `Admin\ConfigController` y `ConfigModel`
+    - `ConfigModel`: `getAll()`, `get($key)`, `set($key, $value)` con caché en `$_SESSION['config']` por petición
+    - Panel con campos editables: nombre tienda, correo, WhatsApp, dirección, redes sociales, datos bancarios
+    - `POST /admin/configuracion`: actualiza tabla `configuracion` en DB
+    - _Requisitos: 20.1, 20.2, 20.3_
+  - [ ]* 9.15 Escribir pruebas de propiedad para configuración y WhatsApp
+    - **Propiedad 52: Botón de WhatsApp Contiene el Número Configurado**
+    - **Propiedad 53: Guardado de Configuración Persiste Correctamente (Round-Trip)**
+    - **Propiedad 54: Configuración Cargada una Sola Vez por Petición**
+    - **Valida: Requisitos 19.1, 19.2, 20.2, 20.3**
+  - [x] 9.16 Implementar `NewsletterController` (frontend) y endpoint de suscripción
+    - `POST /newsletter/suscribir`: valida correo, verifica duplicado via `NewsletterModel::exists()`, inserta si no existe
+    - Mensaje descriptivo si el correo ya está suscrito
+    - _Requisitos: 18.2, 18.3_
+  - [ ]* 9.17 Escribir prueba de propiedad para newsletter
+    - **Propiedad 51: Suscripción al Newsletter es Idempotente (Sin Duplicados)**
+    - **Valida: Requisitos 18.2, 18.3**
+  - [x] 9.18 Checkpoint — Verificar que todos los paneles admin funcionan correctamente
+    - Asegurar que todas las pruebas de la fase 9 pasan, consultar al usuario si hay dudas.
+
+
+- [x] 10. Fase 10 — SEO, Seguridad y Despliegue
+  - [x] 10.1 Implementar `SeoController` — sitemap.xml y robots.txt
+    - `GET /sitemap.xml`: genera XML dinámico con URLs de productos activos y categorías activas
+    - `GET /robots.txt`: permite indexación de páginas públicas; bloquea `/admin/*`, `/mi-cuenta/*`, `/checkout/*`
+    - URLs en formato amigable: `/[cat-slug]/[prod-slug]` para productos, `/catalogo/[cat-slug]` para categorías
+    - _Requisitos: 14.1, 14.3, 14.4_
+  - [ ]* 10.2 Escribir pruebas de propiedad para SEO
+    - **Propiedad 43: URLs Generadas Siguen el Formato Amigable**
+    - **Propiedad 44: Sitemap Contiene Todas las URLs de Productos y Categorías Activos**
+    - **Valida: Requisitos 14.1, 14.3**
+  - [x] 10.3 Verificar y completar implementación de seguridad
+    - Confirmar que `SecurityHeadersMiddleware` inyecta las tres cabeceras en toda respuesta HTTP
+    - Revisar CSP básica para no bloquear Bootstrap CDN ni assets propios
+    - Revisar que todos los formularios POST tienen campo `_csrf_token` generado y validado
+    - _Requisitos: 13.1, 13.6_
+  - [x] 10.4 Crear archivos de compatibilidad para despliegue en GoDaddy Linux
+    - `public/.htaccess`: reglas `mod_rewrite` adaptadas a hosting Linux compartido
+    - `.htaccess` raíz: redirige a `public/`, protege `/config`, `/storage`, `/vendor`
+    - `config/config.example.php`: plantilla documentada con todas las claves necesarias
+    - _Requisitos: 2.5, 13.6_
+  - [x] 10.5 Checkpoint final — Verificar que todas las pruebas pasan
+    - Ejecutar suite completa de pruebas; asegurar que pasan todas, consultar al usuario si hay dudas.
+
+---
+
+## Notas
+
+- Sub-tareas marcadas con `*` son opcionales y pueden omitirse para un MVP más rápido.
+- Cada tarea referencia los requisitos y propiedades de corrección específicos del `design.md`.
+- Los checkpoints aseguran validación incremental del sistema.
+- Las pruebas de propiedad usan PHPUnit 10+ con `giorgiosironi/eris` para generación de datos aleatorios.
+- El carrito se gestiona exclusivamente en sesión (`$_SESSION['cart']`), sin persistencia en DB.
+- Los slugs se generan automáticamente al crear/editar productos y categorías, con sufijo numérico si hay colisión.

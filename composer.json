@@ -1,0 +1,40 @@
+{
+    "name": "viluna/jewelry-store",
+    "description": "VILUNA - Tienda virtual de joyería fina con arquitectura MVC en PHP 8+",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.1",
+        "phpmailer/phpmailer": "^6.8",
+        "league/oauth2-google": "^4.0",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5",
+        "giorgiosironi/eris": "^0.12"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\Controllers\\Admin\\": "app/controllers/Admin/",
+            "App\\Controllers\\": "app/controllers/",
+            "App\\Models\\": "app/models/",
+            "Core\\Middleware\\": "core/Middleware/",
+            "Core\\": "core/",
+            "Services\\": "services/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

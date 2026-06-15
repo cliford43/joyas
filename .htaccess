@@ -1,0 +1,19 @@
+Options -Indexes
+DirectoryIndex index.php
+
+# Deny access to sensitive directories
+<FilesMatch "\.(env|log|sql|sh|bak|gitignore)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Proteger config, storage y vendor
+    RewriteRule ^(config|storage|vendor)/ - [F,L]
+
+    # Redirigir todo a public/
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
