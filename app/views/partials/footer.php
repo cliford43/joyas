@@ -7,6 +7,7 @@ $whatsapp = $config['whatsapp'] ?? '';
 $facebook  = $config['facebook']  ?? '#';
 $instagram = $config['instagram'] ?? '#';
 $nombreTienda = $config['nombre_tienda'] ?? 'VILUNA';
+$logoSrc = $logoPrincipalUrl ?? asset('images/logo.svg');
 ?>
 <footer class="footer-viluna" role="contentinfo">
   <div class="container">
@@ -15,7 +16,7 @@ $nombreTienda = $config['nombre_tienda'] ?? 'VILUNA';
       <!-- Marca -->
       <div class="col-lg-4">
         <a href="<?= url() ?>">
-          <img src="<?= asset('images/logo.svg') ?>" alt="<?= e($nombreTienda) ?>" height="50" class="mb-3">
+          <img src="<?= e($logoSrc) ?>" alt="<?= e($nombreTienda) ?>" height="50" class="mb-3">
         </a>
         <p class="small" style="color:rgba(255,255,255,0.55);max-width:280px;">
           Joyería fina y exclusiva. Cada pieza es una obra de arte creada con pasión y los mejores materiales.

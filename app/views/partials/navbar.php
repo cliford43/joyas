@@ -5,12 +5,13 @@
 $cartCount = isset($_SESSION['cart']) ? array_sum(array_column($_SESSION['cart'], 'cantidad')) : 0;
 $isLoggedIn = !empty($_SESSION['user_id']);
 $isAdmin = ($isLoggedIn && ($_SESSION['user_rol'] ?? '') === 'admin');
+$logoSrc = $logoPrincipalUrl ?? asset('images/logo.svg');
 ?>
 <nav class="navbar navbar-viluna navbar-expand-lg fixed-top" id="mainNav" aria-label="Navegación principal">
   <div class="container">
     <!-- Logo -->
     <a class="navbar-brand" href="<?= url() ?>">
-      <img src="<?= asset('images/logo.svg') ?>" alt="VILUNA Joyería" height="48">
+      <img src="<?= e($logoSrc) ?>" alt="VILUNA Joyería" height="48">
     </a>
 
     <!-- Toggle móvil -->

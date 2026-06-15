@@ -110,6 +110,37 @@ class AuthController extends Controller
         }
     }
 
+    /** POST /verificar/check */
+    public function verificarCodigo(): void
+    {
+        $email  = strtolower(trim($_POST['email'] ?? ($_SESSION['verificar_email'] ?? '')));
+        $codigo = trim($_POST['codigo'] ?? '');
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $codigo === '') {
+            $this->render('auth/verificar', [
+                'pageTitle' => 'Verificar cuenta',
+                'error'     => 'Correo o código inválido.',
+                'email'     => $email,
+            ]);
+            return;
+        }
+
+        $ok = UserModel::verifyByEmail($email, $codigo);
+
+        if ($ok) {
+            unset($_SESSION['verificar_email']);
+            $this->flash('success', '¡Cuenta verificada! Ya puedes iniciar sesión.');
+            $this->redirect(url('login'));
+            return;
+        }
+
+        $this->render('auth/verificar', [
+            'pageTitle' => 'Verificar cuenta',
+            'error'     => 'Código inválido o cuenta ya verificada.',
+            'email'     => $email,
+        ]);
+    }
+
     // ─── Login ────────────────────────────────────────────────
 
     public function loginForm(): void

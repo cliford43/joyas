@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <?php
+    $siteConfig = \App\Models\ConfigModel::getAll();
+    $logoConfig = trim((string)($siteConfig['logo_principal'] ?? ''));
+    $logoPrincipalUrl = $logoConfig !== '' ? mediaUrl($logoConfig) : asset('images/logo.svg');
+    $themeVars = themeCssVariables($siteConfig);
+  ?>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= isset($pageTitle) ? e($pageTitle) . ' — Admin VILUNA' : 'Panel Admin — VILUNA' ?></title>
@@ -19,6 +25,7 @@
   <!-- Custom CSS -->
   <link rel="stylesheet" href="<?= asset('css/custom.css') ?>">
   <link rel="stylesheet" href="<?= asset('css/admin.css') ?>">
+  <style>:root { <?= $themeVars ?> }</style>
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
@@ -32,7 +39,7 @@
       <i class="bi bi-list"></i>
     </button>
     <a href="<?= url('admin') ?>" class="brand">
-      <img src="<?= asset('images/logo.svg') ?>" alt="VILUNA">
+      <img src="<?= e($logoPrincipalUrl) ?>" alt="VILUNA">
       <span>Admin</span>
     </a>
     <div class="header-right">

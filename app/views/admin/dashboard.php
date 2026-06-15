@@ -9,8 +9,8 @@
 <div class="row g-3 mb-4">
   <div class="col-sm-6 col-xl-3">
     <div class="admin-stat">
-      <div class="stat-icon"><i class="bi bi-currency-dollar"></i></div>
-      <div class="stat-number">S/ <?= number_format($totalVentas ?? 0, 0) ?></div>
+      <div class="stat-icon"><i class="bi">Q</i></div>
+      <div class="stat-number">Q <?= number_format($totalVentas ?? 0, 0) ?></div>
       <div class="stat-label">Ventas totales</div>
     </div>
   </div>
@@ -91,7 +91,7 @@
               <td><?= e($o['nombre'] . ' ' . $o['apellido']) ?></td>
               <td><span class="status-badge status-<?= e($o['estado']) ?>"><?= e(\App\Models\OrderModel::ESTADOS[$o['estado']] ?? '') ?></span></td>
               <td><?= $o['metodo_pago'] === 'transferencia' ? 'Transferencia' : 'Contra entrega' ?></td>
-              <td class="text-end">S/ <?= number_format((float)$o['total'], 2) ?></td>
+              <td class="text-end"><?= formatPrice((float)$o['total']) ?></td>
               <td><a href="<?= url('admin/ordenes/' . $o['id']) ?>" class="btn btn-sm btn-outline-secondary">Ver</a></td>
             </tr>
             <?php endforeach; ?>
@@ -115,7 +115,7 @@ $extraJs = <<<JS
     data: {
       labels: {$mesesJson},
       datasets: [{
-        label: 'Ventas (S/)',
+        label: 'Ventas (Q)',
         data: {$ventasJson},
         backgroundColor: 'rgba(212,175,55,0.25)',
         borderColor: '#D4AF37',
@@ -127,7 +127,7 @@ $extraJs = <<<JS
       responsive: true,
       plugins: { legend: { display: false } },
       scales: {
-        y: { beginAtZero: true, ticks: { callback: v => 'S/ ' + v.toLocaleString() } },
+        y: { beginAtZero: true, ticks: { callback: v => 'Q ' + v.toLocaleString() } },
         x: { grid: { display: false } }
       }
     }

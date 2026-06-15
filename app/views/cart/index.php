@@ -50,7 +50,7 @@ $total   = $summary['total']          ?? 0;
               <?php foreach ($items as $pid => $item):
                 $precioItem  = max(0, (float)$item['precio'] - (float)$item['descuento']);
                 $subtotalItem= $precioItem * (int)$item['cantidad'];
-                $imgUrl      = $item['imagen_principal'] ? '/' . ltrim($item['imagen_principal'], '/') : asset('images/placeholder-joya.jpg');
+                $imgUrl      = mediaUrl($item['imagen_principal'] ?? null);
               ?>
               <tr id="row-<?= (int)$pid ?>">
                 <!-- Producto -->
@@ -64,7 +64,7 @@ $total   = $summary['total']          ?? 0;
                         <?= e($item['nombre']) ?>
                       </a>
                       <div style="font-size:0.8rem;color:var(--color-gray);">
-                        S/ <?= number_format($precioItem, 2) ?> c/u
+                        <?= formatPrice($precioItem) ?> c/u
                       </div>
                     </div>
                   </div>
@@ -79,7 +79,7 @@ $total   = $summary['total']          ?? 0;
                 </td>
                 <!-- Subtotal -->
                 <td class="text-end fw-bold" id="subtotal-<?= (int)$pid ?>">
-                  S/ <?= number_format($subtotalItem, 2) ?>
+                  <?= formatPrice($subtotalItem) ?>
                 </td>
                 <!-- Eliminar -->
                 <td class="text-end" style="width:40px;">
@@ -118,13 +118,13 @@ $total   = $summary['total']          ?? 0;
 
             <div class="summary-row">
               <span>Subtotal</span>
-              <span id="summarySubtotal">S/ <?= number_format($subtotal, 2) ?></span>
+              <span id="summarySubtotal"><?= formatPrice($subtotal) ?></span>
             </div>
 
             <?php if ($coupon): ?>
             <div class="summary-row text-success">
               <span>Descuento (<?= e($coupon['codigo']) ?> <?= $coupon['porcentaje'] ?>%)</span>
-              <span id="summaryCouponDiscount">-S/ <?= number_format($descCup, 2) ?></span>
+              <span id="summaryCouponDiscount">-<?= formatPrice($descCup) ?></span>
             </div>
             <?php else: ?>
             <div class="summary-row" id="couponDiscountRow" style="display:none;">
@@ -135,7 +135,7 @@ $total   = $summary['total']          ?? 0;
 
             <div class="summary-row total-row">
               <span>Total</span>
-              <span id="summaryTotal">S/ <?= number_format($total, 2) ?></span>
+              <span id="summaryTotal"><?= formatPrice($total) ?></span>
             </div>
 
             <!-- Cupón -->

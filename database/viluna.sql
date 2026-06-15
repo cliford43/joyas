@@ -206,20 +206,17 @@ INSERT INTO configuracion (clave, valor) VALUES
 -- ============================================================
 -- USUARIO ADMINISTRADOR POR DEFECTO
 -- Correo:    admin@viluna.com
--- Contraseña: Admin123*   (hash bcrypt generado con PHP)
--- php -r "echo password_hash('Admin123*', PASSWORD_BCRYPT);"
+-- Contraseña: Admin123*   (hash bcrypt válido)
 -- ============================================================
 INSERT INTO usuarios (nombre, apellido, correo, password, rol, verificado) VALUES
 ('Admin', 'VILUNA', 'admin@viluna.com',
- '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+ '$2y$12$rvTiE43BKWut73VRqjvqHuAc9y9/T3suYAjBT.yhqjCEaiC4rIswm',
  'admin', 1);
--- NOTA: El hash anterior es solo un placeholder válido de bcrypt.
--- En producción regenerar con: password_hash('Admin123*', PASSWORD_BCRYPT)
 
 -- Cliente de prueba: cliente@viluna.com / Test123*
 INSERT INTO usuarios (nombre, apellido, correo, password, rol, verificado) VALUES
 ('María', 'González', 'cliente@viluna.com',
- '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+ '$2y$12$PxGyj2yQSgt7X5V1qXnoye5jbUnDBZKxaOes2EGx3AN7Ge17VEa4O',
  'cliente', 1);
 
 -- ============================================================

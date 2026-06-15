@@ -14,7 +14,7 @@
           <tr>
             <td>#<?= (int)$c['id'] ?></td>
             <td><?= e($c['nombre'] . ' ' . $c['apellido']) ?><br><small class="text-muted"><?= e($c['correo']) ?></small></td>
-            <td>S/ <?= number_format((float)$c['total'], 2) ?></td>
+            <td><?= formatPrice((float)$c['total']) ?></td>
             <td><?= date('d/m/Y H:i', strtotime($c['fecha_creacion'])) ?></td>
             <td>
               <?php if (str_ends_with(strtolower($c['comprobante_ruta']), '.pdf')): ?>

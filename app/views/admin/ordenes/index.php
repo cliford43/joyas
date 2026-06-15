@@ -26,7 +26,7 @@
           <td><span class="status-badge status-<?= e($o['estado']) ?>"><?= e($estados[$o['estado']] ?? '') ?></span></td>
           <td><?= $o['metodo_pago'] === 'transferencia' ? 'Transferencia' : 'Contra entrega' ?></td>
           <td><?= date('d/m/Y', strtotime($o['fecha_creacion'])) ?></td>
-          <td class="text-end">S/ <?= number_format((float)$o['total'], 2) ?></td>
+          <td class="text-end"><?= formatPrice((float)$o['total']) ?></td>
           <td><a href="<?= url('admin/ordenes/' . $o['id']) ?>" class="btn btn-sm btn-outline-secondary">Ver</a></td>
         </tr>
         <?php endforeach; ?>

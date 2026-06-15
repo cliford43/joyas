@@ -18,9 +18,7 @@
           <?php foreach ($productos as $prod): ?>
             <?php
             $precioFinal = max(0, (float)$prod['precio'] - (float)$prod['descuento']);
-            $imgUrl = $prod['imagen_principal']
-                ? '/' . ltrim($prod['imagen_principal'], '/')
-                : asset('images/placeholder-joya.jpg');
+            $imgUrl = mediaUrl($prod['imagen_principal'] ?? null);
             ?>
             <div class="col-6 col-md-4">
               <article class="product-card h-100">
@@ -37,7 +35,7 @@
                     </a>
                   </h3>
                   <div class="price-block mb-3">
-                    <span class="price-current">S/ <?= number_format($precioFinal, 2) ?></span>
+                    <span class="price-current"><?= formatPrice($precioFinal) ?></span>
                   </div>
                   <div class="d-flex gap-2">
                     <?php if ((int)$prod['stock'] > 0): ?>

@@ -40,7 +40,7 @@ $estadoLabel = \App\Models\OrderModel::ESTADOS[$order['estado'] ?? 'pendiente'] 
               <tr>
                 <td><?= e($item['nombre']) ?></td>
                 <td class="text-center"><?= (int)$item['cantidad'] ?></td>
-                <td class="text-end">S/ <?= number_format($precioUnitario * (int)$item['cantidad'], 2) ?></td>
+                <td class="text-end"><?= formatPrice($precioUnitario * (int)$item['cantidad']) ?></td>
               </tr>
               <?php endforeach; ?>
             </tbody>
@@ -48,7 +48,7 @@ $estadoLabel = \App\Models\OrderModel::ESTADOS[$order['estado'] ?? 'pendiente'] 
           <hr style="border-color:rgba(212,175,55,0.2);">
           <div class="d-flex justify-content-between px-1">
             <strong>Total pagado</strong>
-            <strong class="text-gold">S/ <?= number_format((float)$order['total'], 2) ?></strong>
+            <strong class="text-gold"><?= formatPrice((float)$order['total']) ?></strong>
           </div>
         </div>
 

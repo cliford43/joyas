@@ -17,10 +17,18 @@ $router->get('/buscar', 'SearchController@handle');
 $router->get('/sitemap.xml', 'SeoController@sitemap');
 $router->get('/robots.txt', 'SeoController@robots');
 
+// ─── Archivos subidos ─────────────────────────────────────────────────────────
+$router->get('/uploads/branding/{filename}', 'UploadController@brandingAsset');
+$router->get('/uploads/categorias/{filename}', 'UploadController@categoryImage');
+$router->get('/uploads/productos/{filename}', 'UploadController@productImage');
+$router->get('/uploads/comprobantes/{filename}', 'UploadController@voucher');
+
 // ─── Autenticación ────────────────────────────────────────────────────────────
 $router->get('/registro', 'AuthController@registroForm');
 $router->post('/registro', 'AuthController@registro', ['csrf']);
 $router->get('/verificar/{codigo}', 'AuthController@verificar');
+$router->post('/verificar/check', 'AuthController@verificarCodigo', ['csrf']);
+$router->post('/auth/reenviar', 'AuthController@reenviarCodigo', ['csrf']);
 $router->get('/login', 'AuthController@loginForm');
 $router->post('/login', 'AuthController@login', ['csrf']);
 $router->get('/logout', 'AuthController@logout', ['auth']);

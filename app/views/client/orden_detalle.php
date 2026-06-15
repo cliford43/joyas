@@ -33,25 +33,25 @@ $metodoPago  = $orden['metodo_pago'] === 'transferencia' ? 'Transferencia bancar
                 </a>
               </td>
               <td class="text-center"><?= (int)$item['cantidad'] ?></td>
-              <td class="text-end">S/ <?= number_format($precioUnit, 2) ?></td>
-              <td class="text-end">S/ <?= number_format($precioUnit * (int)$item['cantidad'], 2) ?></td>
+              <td class="text-end"><?= formatPrice($precioUnit) ?></td>
+              <td class="text-end"><?= formatPrice($precioUnit * (int)$item['cantidad']) ?></td>
             </tr>
             <?php endforeach; ?>
           </tbody>
           <tfoot>
             <tr>
               <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
-              <td class="text-end">S/ <?= number_format((float)$orden['subtotal'], 2) ?></td>
+              <td class="text-end"><?= formatPrice((float)$orden['subtotal']) ?></td>
             </tr>
             <?php if ((float)$orden['descuento_cupon'] > 0): ?>
             <tr>
               <td colspan="3" class="text-end text-success">Descuento cupón:</td>
-              <td class="text-end text-success">-S/ <?= number_format((float)$orden['descuento_cupon'], 2) ?></td>
+              <td class="text-end text-success">-<?= formatPrice((float)$orden['descuento_cupon']) ?></td>
             </tr>
             <?php endif; ?>
             <tr>
               <td colspan="3" class="text-end"><strong>Total:</strong></td>
-              <td class="text-end"><strong class="text-gold">S/ <?= number_format((float)$orden['total'], 2) ?></strong></td>
+              <td class="text-end"><strong class="text-gold"><?= formatPrice((float)$orden['total']) ?></strong></td>
             </tr>
           </tfoot>
         </table>

@@ -8,11 +8,19 @@
 <div class="admin-card">
   <div class="table-responsive">
     <table class="table admin-table mb-0">
-      <thead><tr><th>#</th><th>Nombre</th><th>Slug</th><th>Estado</th><th></th></tr></thead>
+      <thead><tr><th>#</th><th>Imagen</th><th>Nombre</th><th>Slug</th><th>Estado</th><th></th></tr></thead>
       <tbody>
         <?php foreach ($categorias as $cat): ?>
         <tr>
           <td><?= (int)$cat['id'] ?></td>
+          <td>
+            <?php if (!empty($cat['imagen'])): ?>
+              <img src="<?= e(mediaUrl((string)$cat['imagen'])) ?>" alt="<?= e($cat['nombre']) ?>"
+                   style="width:72px;height:48px;object-fit:cover;border-radius:10px;">
+            <?php else: ?>
+              <span class="text-muted small">Sin imagen</span>
+            <?php endif; ?>
+          </td>
           <td><?= e($cat['nombre']) ?></td>
           <td><code><?= e($cat['slug']) ?></code></td>
           <td>

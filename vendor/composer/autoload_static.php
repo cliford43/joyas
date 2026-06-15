@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit20e13caf9fc81a34de4f15a7d5f6ef3e
+class ComposerStaticInitfc2df670319495b766ed990a66017f03
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -19,18 +19,18 @@ class ComposerStaticInit20e13caf9fc81a34de4f15a7d5f6ef3e
     );
 
     public static $prefixLengthsPsr4 = array (
-        'T' =>
+        'T' => 
         array (
             'Tests\\' => 6,
         ),
-        'S' =>
+        'S' => 
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Services\\' => 9,
         ),
-        'P' =>
+        'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
@@ -38,122 +38,169 @@ class ComposerStaticInit20e13caf9fc81a34de4f15a7d5f6ef3e
             'PhpOption\\' => 10,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
-        'L' =>
+        'L' => 
         array (
             'League\\OAuth2\\Client\\' => 21,
         ),
-        'G' =>
+        'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
             'GrahamCampbell\\ResultType\\' => 26,
         ),
-        'E' =>
+        'E' => 
         array (
             'Eris\\' => 5,
         ),
-        'D' =>
+        'D' => 
         array (
             'Dotenv\\' => 7,
             'DeepCopy\\' => 9,
         ),
-        'C' =>
+        'C' => 
         array (
+            'Core\\Middleware\\' => 16,
             'Core\\' => 5,
         ),
-        'A' =>
+        'A' => 
         array (
-            'App\\' => 4,
+            'App\\Models\\' => 11,
+            'App\\Controllers\\Admin\\' => 22,
+            'App\\Controllers\\' => 16,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Tests\\' =>
+        'Tests\\' => 
         array (
             0 => __DIR__ . '/../..' . '/tests',
         ),
-        'Symfony\\Polyfill\\Php80\\' =>
+        'Symfony\\Polyfill\\Php80\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
         ),
-        'Symfony\\Polyfill\\Mbstring\\' =>
+        'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
-        'Symfony\\Polyfill\\Ctype\\' =>
+        'Symfony\\Polyfill\\Ctype\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
-        'Services\\' =>
+        'Services\\' => 
         array (
             0 => __DIR__ . '/../..' . '/services',
         ),
-        'Psr\\Http\\Message\\' =>
+        'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
-        'Psr\\Http\\Client\\' =>
+        'Psr\\Http\\Client\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-client/src',
         ),
-        'PhpParser\\' =>
+        'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
-        'PhpOption\\' =>
+        'PhpOption\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
         ),
-        'PHPMailer\\PHPMailer\\' =>
+        'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
-        'League\\OAuth2\\Client\\' =>
+        'League\\OAuth2\\Client\\' => 
         array (
-            0 => __DIR__ . '/..' . '/league/oauth2-google/src',
-            1 => __DIR__ . '/..' . '/league/oauth2-client/src',
+            0 => __DIR__ . '/..' . '/league/oauth2-client/src',
+            1 => __DIR__ . '/..' . '/league/oauth2-google/src',
         ),
-        'GuzzleHttp\\Psr7\\' =>
+        'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
-        'GuzzleHttp\\Promise\\' =>
+        'GuzzleHttp\\Promise\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
         ),
-        'GuzzleHttp\\' =>
+        'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
-        'GrahamCampbell\\ResultType\\' =>
+        'GrahamCampbell\\ResultType\\' => 
         array (
             0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
         ),
-        'Eris\\' =>
+        'Eris\\' => 
         array (
             0 => __DIR__ . '/..' . '/giorgiosironi/eris/src',
         ),
-        'Dotenv\\' =>
+        'Dotenv\\' => 
         array (
             0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
         ),
-        'DeepCopy\\' =>
+        'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
-        'Core\\' =>
+        'Core\\Middleware\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/core/Middleware',
+        ),
+        'Core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/core',
         ),
-        'App\\' =>
+        'App\\Models\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/app',
+            0 => __DIR__ . '/../..' . '/app/models',
+        ),
+        'App\\Controllers\\Admin\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/controllers/Admin',
+        ),
+        'App\\Controllers\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/controllers',
         ),
     );
 
     public static $classMap = array (
+        'App\\Controllers\\Admin\\CategoryController' => __DIR__ . '/../..' . '/app/controllers/Admin/CategoryController.php',
+        'App\\Controllers\\Admin\\ConfigController' => __DIR__ . '/../..' . '/app/controllers/Admin/ConfigController.php',
+        'App\\Controllers\\Admin\\CouponController' => __DIR__ . '/../..' . '/app/controllers/Admin/CouponController.php',
+        'App\\Controllers\\Admin\\DashboardController' => __DIR__ . '/../..' . '/app/controllers/Admin/DashboardController.php',
+        'App\\Controllers\\Admin\\NewsletterController' => __DIR__ . '/../..' . '/app/controllers/Admin/NewsletterController.php',
+        'App\\Controllers\\Admin\\OrderController' => __DIR__ . '/../..' . '/app/controllers/Admin/OrderController.php',
+        'App\\Controllers\\Admin\\PaymentController' => __DIR__ . '/../..' . '/app/controllers/Admin/PaymentController.php',
+        'App\\Controllers\\Admin\\ProductController' => __DIR__ . '/../..' . '/app/controllers/Admin/ProductController.php',
+        'App\\Controllers\\Admin\\UserController' => __DIR__ . '/../..' . '/app/controllers/Admin/UserController.php',
+        'App\\Controllers\\AuthController' => __DIR__ . '/../..' . '/app/controllers/AuthController.php',
+        'App\\Controllers\\CartController' => __DIR__ . '/../..' . '/app/controllers/CartController.php',
+        'App\\Controllers\\CatalogController' => __DIR__ . '/../..' . '/app/controllers/CatalogController.php',
+        'App\\Controllers\\CheckoutController' => __DIR__ . '/../..' . '/app/controllers/CheckoutController.php',
+        'App\\Controllers\\ClientController' => __DIR__ . '/../..' . '/app/controllers/ClientController.php',
+        'App\\Controllers\\CouponController' => __DIR__ . '/../..' . '/app/controllers/CouponController.php',
+        'App\\Controllers\\ErrorController' => __DIR__ . '/../..' . '/app/controllers/ErrorController.php',
+        'App\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/controllers/HomeController.php',
+        'App\\Controllers\\NewsletterController' => __DIR__ . '/../..' . '/app/controllers/NewsletterController.php',
+        'App\\Controllers\\OAuthController' => __DIR__ . '/../..' . '/app/controllers/OAuthController.php',
+        'App\\Controllers\\ProductController' => __DIR__ . '/../..' . '/app/controllers/ProductController.php',
+        'App\\Controllers\\SearchController' => __DIR__ . '/../..' . '/app/controllers/SearchController.php',
+        'App\\Controllers\\SeoController' => __DIR__ . '/../..' . '/app/controllers/SeoController.php',
+        'App\\Controllers\\WishlistController' => __DIR__ . '/../..' . '/app/controllers/WishlistController.php',
+        'App\\Models\\CartModel' => __DIR__ . '/../..' . '/app/models/CartModel.php',
+        'App\\Models\\CategoryModel' => __DIR__ . '/../..' . '/app/models/CategoryModel.php',
+        'App\\Models\\ConfigModel' => __DIR__ . '/../..' . '/app/models/ConfigModel.php',
+        'App\\Models\\CouponModel' => __DIR__ . '/../..' . '/app/models/CouponModel.php',
+        'App\\Models\\NewsletterModel' => __DIR__ . '/../..' . '/app/models/NewsletterModel.php',
+        'App\\Models\\OrderModel' => __DIR__ . '/../..' . '/app/models/OrderModel.php',
+        'App\\Models\\ProductModel' => __DIR__ . '/../..' . '/app/models/ProductModel.php',
+        'App\\Models\\UserModel' => __DIR__ . '/../..' . '/app/models/UserModel.php',
+        'App\\Models\\WishlistModel' => __DIR__ . '/../..' . '/app/models/WishlistModel.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Core\\Controller' => __DIR__ . '/../..' . '/core/Controller.php',
@@ -1898,9 +1945,9 @@ class ComposerStaticInit20e13caf9fc81a34de4f15a7d5f6ef3e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit20e13caf9fc81a34de4f15a7d5f6ef3e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit20e13caf9fc81a34de4f15a7d5f6ef3e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit20e13caf9fc81a34de4f15a7d5f6ef3e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfc2df670319495b766ed990a66017f03::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfc2df670319495b766ed990a66017f03::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfc2df670319495b766ed990a66017f03::$classMap;
 
         }, null, ClassLoader::class);
     }

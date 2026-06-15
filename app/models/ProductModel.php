@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Core\Model;
+use Services\FileUploader;
 
 /**
  * ProductModel — Gestión del catálogo de productos VILUNA.
@@ -309,6 +310,8 @@ class ProductModel extends Model
     /** Agrega imagen a producto. */
     public static function addImage(int $productId, string $ruta, bool $esPrincipal = false): void
     {
+        $ruta = str_replace('\\', '/', $ruta);
+
         // Si es principal, quitar la principal anterior
         if ($esPrincipal) {
             static::execute(
@@ -328,7 +331,42 @@ class ProductModel extends Model
     /** Elimina una imagen por ID. */
     public static function deleteImage(int $imageId): void
     {
+        $image = static::fetchOne('SELECT * FROM producto_imagenes WHERE id = :id LIMIT 1', [':id' => $imageId]);
+        if (!$image) {
+            return;
+        }
+
+        $productId = (int)$image['producto_id'];
+
+        if (str_starts_with((string)$image['ruta'], 'uploads/')) {
+            FileUploader::delete((string)$image['ruta']);
+        }
+
         static::execute('DELETE FROM producto_imagenes WHERE id = :id', [':id' => $imageId]);
+
+        if ((int)$image['es_principal']) {
+            $nextImage = static::fetchOne(
+                'SELECT id FROM producto_imagenes WHERE producto_id = :id ORDER BY orden ASC, id ASC LIMIT 1',
+                [':id' => $productId]
+            );
+
+            if (!empty($nextImage['id'])) {
+                static::execute(
+                    'UPDATE producto_imagenes SET es_principal = 1 WHERE id = :id',
+                    [':id' => (int)$nextImage['id']]
+                );
+            }
+        }
+    }
+
+    /** Elimina placeholders semilla de un producto cuando ya existen fotos reales. */
+    public static function deletePlaceholderImages(int $productId): void
+    {
+        static::execute(
+            "DELETE FROM producto_imagenes
+             WHERE producto_id = :id AND ruta LIKE 'assets/images/productos/placeholder-%'",
+            [':id' => $productId]
+        );
     }
 
     // ─── Escritura ────────────────────────────────────────────

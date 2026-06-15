@@ -52,7 +52,7 @@
 
             <!-- Precio -->
             <div class="mb-3">
-              <label class="form-label-viluna">Precio (S/)</label>
+              <label class="form-label-viluna">Precio (Q)</label>
               <div class="d-flex gap-2">
                 <input type="number" name="precio_min" class="form-control form-control-viluna"
                        placeholder="Mín." min="0" step="0.01"

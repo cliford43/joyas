@@ -32,7 +32,7 @@ $ordenesPendientes = array_filter($ordenes ?? [], fn($o) => $o['estado'] === 'pe
         <div class="col-sm-4">
           <div class="stat-card text-center p-3">
             <div class="stat-number text-gold">
-              S/ <?= number_format(array_sum(array_column($ordenes ?? [], 'total')), 2) ?>
+              <?= formatPrice((float)array_sum(array_column($ordenes ?? [], 'total'))) ?>
             </div>
             <div class="stat-label">Total gastado</div>
           </div>
@@ -58,7 +58,7 @@ $ordenesPendientes = array_filter($ordenes ?? [], fn($o) => $o['estado'] === 'pe
               <td><?= (int)$o['id'] ?></td>
               <td><?= date('d/m/Y', strtotime($o['fecha_creacion'])) ?></td>
               <td><span class="status-badge status-<?= e($o['estado']) ?>"><?= e(\App\Models\OrderModel::ESTADOS[$o['estado']] ?? $o['estado']) ?></span></td>
-              <td>S/ <?= number_format((float)$o['total'], 2) ?></td>
+              <td><?= formatPrice((float)$o['total']) ?></td>
               <td><a href="<?= url('mi-cuenta/ordenes/' . $o['id']) ?>" class="btn btn-sm btn-outline-secondary">Ver</a></td>
             </tr>
             <?php endforeach; ?>

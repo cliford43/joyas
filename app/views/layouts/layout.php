@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <?php
+    $siteConfig = \App\Models\ConfigModel::getAll();
+    $logoConfig = trim((string)($siteConfig['logo_principal'] ?? ''));
+    $logoPrincipalUrl = $logoConfig !== '' ? mediaUrl($logoConfig) : asset('images/logo.svg');
+    $themeVars = themeCssVariables($siteConfig);
+  ?>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -30,6 +36,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@400;600&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- Custom CSS -->
   <link rel="stylesheet" href="<?= asset('css/custom.css') ?>">
+  <style>:root { <?= $themeVars ?> }</style>
 
   <?php if (!empty($extraCss)): echo $extraCss; endif; ?>
 </head>

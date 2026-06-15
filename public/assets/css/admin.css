@@ -17,7 +17,7 @@ body.admin-body {
   position: fixed;
   top: 0; left: 0; right: 0;
   height: var(--admin-header-height);
-  background: var(--color-black, #111);
+  background: var(--menu-bg, #111);
   border-bottom: 1px solid rgba(212,175,55,0.25);
   z-index: 1000;
   display: flex;
@@ -27,7 +27,7 @@ body.admin-body {
 }
 .admin-header .brand {
   display: flex; align-items: center; gap: 0.75rem;
-  color: #D4AF37;
+  color: var(--menu-hover, #D4AF37);
   font-size: 0.8rem;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -40,13 +40,13 @@ body.admin-body {
   margin-left: auto;
   display: flex; align-items: center; gap: 1rem;
 }
-.admin-header .header-right a { color: rgba(255,255,255,0.7); font-size: 0.85rem; text-decoration: none; }
-.admin-header .header-right a:hover { color: #D4AF37; }
+.admin-header .header-right a { color: var(--menu-text, #FFFFFF); font-size: 0.85rem; text-decoration: none; }
+.admin-header .header-right a:hover { color: var(--menu-hover, #D4AF37); }
 .admin-sidebar-toggle {
   display: none;
   background: none;
   border: none;
-  color: #D4AF37;
+  color: var(--menu-hover, #D4AF37);
   font-size: 1.3rem;
   cursor: pointer;
   padding: 0;
@@ -59,7 +59,7 @@ body.admin-body {
   left: 0;
   width: var(--admin-sidebar-width);
   height: calc(100vh - var(--admin-header-height));
-  background: #1A1A1A;
+  background: var(--menu-bg, #1A1A1A);
   overflow-y: auto;
   z-index: 900;
   transition: transform 0.3s ease;
@@ -70,10 +70,10 @@ body.admin-body {
   font-size: 0.65rem;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: rgba(212,175,55,0.5);
+  color: var(--menu-hover, #D4AF37);
 }
 .admin-sidebar .nav-link {
-  color: rgba(255,255,255,0.65);
+  color: var(--menu-text, #FFFFFF);
   padding: 0.65rem 1.5rem;
   font-size: 0.83rem;
   display: flex;
@@ -86,9 +86,9 @@ body.admin-body {
 .admin-sidebar .nav-link i { width: 18px; text-align: center; }
 .admin-sidebar .nav-link:hover,
 .admin-sidebar .nav-link.active {
-  color: #D4AF37;
-  border-left-color: #D4AF37;
-  background: rgba(212,175,55,0.07);
+  color: var(--menu-hover, #D4AF37);
+  border-left-color: var(--menu-hover, #D4AF37);
+  background: rgba(0,0,0,0.2);
 }
 
 /* ─── Main Content ─────────────────────────────────────────── */

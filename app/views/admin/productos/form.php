@@ -33,12 +33,12 @@
         <textarea name="descripcion" class="form-control" rows="4"><?= e($old['descripcion'] ?? $producto['descripcion'] ?? '') ?></textarea>
       </div>
       <div class="col-md-4">
-        <label class="form-label">Precio (S/)</label>
+        <label class="form-label">Precio (Q)</label>
         <input type="number" name="precio" class="form-control" step="0.01" min="0" required
                value="<?= e($old['precio'] ?? $producto['precio'] ?? '') ?>">
       </div>
       <div class="col-md-4">
-        <label class="form-label">Descuento (S/)</label>
+        <label class="form-label">Descuento (Q)</label>
         <input type="number" name="descuento" class="form-control" step="0.01" min="0"
                value="<?= e($old['descuento'] ?? $producto['descuento'] ?? '0') ?>">
       </div>
@@ -67,7 +67,7 @@
         <div class="img-preview-grid">
           <?php foreach ($imagenes as $img): ?>
             <div class="img-item">
-              <img src="/<?= e(ltrim($img['ruta'], '/')) ?>" alt="imagen">
+              <img src="<?= e(mediaUrl((string)$img['ruta'])) ?>" alt="imagen">
               <form method="POST" action="<?= url('admin/productos/' . $producto['id'] . '/imagen/eliminar') ?>"
                     data-confirm="¿Eliminar esta imagen?">
                 <input type="hidden" name="_csrf_token" value="<?= $csrfToken ?>">

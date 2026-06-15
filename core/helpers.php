@@ -98,11 +98,93 @@ if (!function_exists('url')) {
     }
 }
 
+if (!function_exists('mediaUrl')) {
+    /**
+     * Genera una URL pública para medios guardados en assets o uploads.
+     */
+    function mediaUrl(?string $path): string
+    {
+        if (empty($path)) {
+            return asset('images/placeholder-joya.jpg');
+        }
+
+        $normalized = ltrim(str_replace('\\', '/', $path), '/');
+
+        if (str_starts_with($normalized, 'assets/')) {
+            return (defined('APP_URL') ? APP_URL : '') . '/' . $normalized;
+        }
+
+        if (str_starts_with($normalized, 'uploads/')) {
+            return url($normalized);
+        }
+
+        return (defined('APP_URL') ? APP_URL : '') . '/' . $normalized;
+    }
+}
+
+if (!function_exists('normalizeHexColor')) {
+    /**
+     * Normaliza colores HEX a formato #RRGGBB o retorna un valor por defecto.
+     */
+    function normalizeHexColor(mixed $value, string $default): string
+    {
+        $candidate = strtoupper(trim((string)$value));
+        if ($candidate === '') {
+            return strtoupper($default);
+        }
+
+        if (preg_match('/^#?[0-9A-F]{6}$/', $candidate) !== 1) {
+            return strtoupper($default);
+        }
+
+        if ($candidate[0] !== '#') {
+            $candidate = '#' . $candidate;
+        }
+
+        return $candidate;
+    }
+}
+
+if (!function_exists('themeCssVariables')) {
+    /**
+     * Genera un bloque de variables CSS con paleta configurable.
+     */
+    function themeCssVariables(array $config = []): string
+    {
+        $map = [
+            '--color-gold'              => normalizeHexColor($config['theme_brand_primary'] ?? '', '#D4AF37'),
+            '--color-gold-light'        => normalizeHexColor($config['theme_brand_primary_light'] ?? '', '#F5D87A'),
+            '--color-gold-dark'         => normalizeHexColor($config['theme_brand_primary_dark'] ?? '', '#B8961E'),
+            '--color-black'             => normalizeHexColor($config['theme_base_text'] ?? '', '#111111'),
+            '--color-white'             => normalizeHexColor($config['theme_base_bg'] ?? '', '#FFFFFF'),
+            '--color-gray'              => normalizeHexColor($config['theme_base_muted'] ?? '', '#6C757D'),
+            '--menu-bg'                 => normalizeHexColor($config['theme_menu_bg'] ?? '', '#111111'),
+            '--menu-text'               => normalizeHexColor($config['theme_menu_text'] ?? '', '#FFFFFF'),
+            '--menu-hover'              => normalizeHexColor($config['theme_menu_hover'] ?? '', '#D4AF37'),
+            '--btn-primary-bg'          => normalizeHexColor($config['theme_btn_primary_bg'] ?? '', '#D4AF37'),
+            '--btn-primary-text'        => normalizeHexColor($config['theme_btn_primary_text'] ?? '', '#111111'),
+            '--btn-primary-hover-bg'    => normalizeHexColor($config['theme_btn_primary_hover_bg'] ?? '', '#B8961E'),
+            '--btn-primary-hover-text'  => normalizeHexColor($config['theme_btn_primary_hover_text'] ?? '', '#FFFFFF'),
+            '--btn-outline-border'      => normalizeHexColor($config['theme_btn_outline_border'] ?? '', '#D4AF37'),
+            '--btn-outline-text'        => normalizeHexColor($config['theme_btn_outline_text'] ?? '', '#D4AF37'),
+            '--btn-outline-hover-bg'    => normalizeHexColor($config['theme_btn_outline_hover_bg'] ?? '', '#D4AF37'),
+            '--btn-outline-hover-text'  => normalizeHexColor($config['theme_btn_outline_hover_text'] ?? '', '#111111'),
+        ];
+
+        $pairs = [];
+        foreach ($map as $varName => $value) {
+            $pairs[] = $varName . ': ' . $value;
+        }
+
+        return implode('; ', $pairs) . ';';
+    }
+}
+
 if (!function_exists('formatPrice')) {
     /**
      * Formatea un precio como moneda.
      */
-    function formatPrice(float $price, string $symbol = 'S/ '): string
+    function formatPrice(float $price, string $symbol = 'Q '): string
     {
         return $symbol . number_format($price, 2, '.', ',');
     }

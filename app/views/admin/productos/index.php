@@ -15,7 +15,7 @@
           <td><?= (int)$p['id'] ?></td>
           <td><?= e($p['nombre']) ?></td>
           <td><?= e($p['categoria_nombre']) ?></td>
-          <td>S/ <?= number_format((float)$p['precio'], 2) ?></td>
+          <td><?= formatPrice((float)$p['precio']) ?></td>
           <td><?= (int)$p['stock'] ?></td>
           <td>
             <span class="badge <?= $p['activo'] ? 'bg-success' : 'bg-secondary' ?>">

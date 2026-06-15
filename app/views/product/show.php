@@ -3,7 +3,7 @@
 $sinStock    = (int)($producto['stock'] ?? 0) === 0;
 $tieneDesc   = (float)($descuento ?? 0) > 0;
 $imgPrincipal = $imagenPrincipal['ruta'] ?? null;
-$imgUrl      = $imgPrincipal ? '/' . ltrim($imgPrincipal, '/') : asset('images/placeholder-joya.jpg');
+$imgUrl      = mediaUrl($imgPrincipal);
 ?>
 
 <!-- Breadcrumb -->
@@ -41,7 +41,7 @@ $imgUrl      = $imgPrincipal ? '/' . ltrim($imgPrincipal, '/') : asset('images/p
           <?php if (!empty($imagenes) && count($imagenes) > 1): ?>
             <div class="thumbnails" role="list" aria-label="Miniaturas del producto">
               <?php foreach ($imagenes as $i => $img): ?>
-                <img src="/<?= e(ltrim($img['ruta'], '/')) ?>"
+                <img src="<?= e(mediaUrl((string)$img['ruta'])) ?>"
                      alt="Vista <?= $i + 1 ?> — <?= e($producto['nombre'] ?? '') ?>"
                      class="thumb <?= (int)$img['es_principal'] ? 'active' : '' ?>"
                      role="listitem"
@@ -69,11 +69,11 @@ $imgUrl      = $imgPrincipal ? '/' . ltrim($imgPrincipal, '/') : asset('images/p
         <!-- Precio -->
         <div class="d-flex align-items-baseline gap-3 mb-4">
           <span style="font-size:2rem;font-weight:700;color:var(--color-black);">
-            S/ <?= number_format($precioFinal ?? 0, 2) ?>
+            <?= formatPrice((float)($precioFinal ?? 0)) ?>
           </span>
           <?php if ($tieneDesc): ?>
             <span style="font-size:1.1rem;color:var(--color-gray);text-decoration:line-through;">
-              S/ <?= number_format($precio ?? 0, 2) ?>
+              <?= formatPrice((float)($precio ?? 0)) ?>
             </span>
             <span class="badge-discount" style="position:static;display:inline-block;">
               -<?= round((($descuento ?? 0) / ($precio ?: 1)) * 100) ?>%

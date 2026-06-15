@@ -142,6 +142,14 @@ class ProductController extends Controller
     {
         if (empty($_FILES['imagenes']['name'][0])) return;
 
+        $mainImage = ProductModel::getMainImage($productId);
+        $mainPath = str_replace('\\', '/', (string)($mainImage['ruta'] ?? ''));
+        $hasSeedPlaceholder = $mainPath !== '' && str_starts_with($mainPath, 'assets/images/productos/placeholder-');
+
+        if ($hasSeedPlaceholder) {
+            ProductModel::deletePlaceholderImages($productId);
+        }
+
         $currentCount = ProductModel::countImages($productId);
         $destDir = defined('UPLOAD_PATH') ? UPLOAD_PATH . '/productos' : ROOT_PATH . '/uploads/productos';
 
@@ -162,8 +170,10 @@ class ProductController extends Controller
 
             try {
                 $ruta = FileUploader::uploadProductImage($file, $destDir);
-                ProductModel::addImage($productId, $ruta, $currentCount === 0 && $i === 0);
+                $makePrincipal = ($currentCount === 0 && $i === 0) || ($hasSeedPlaceholder && $currentCount === 0);
+                ProductModel::addImage($productId, $ruta, $makePrincipal);
                 $currentCount++;
+                $hasSeedPlaceholder = false;
             } catch (\InvalidArgumentException $e) {
                 // Log silencioso — imagen inválida se omite
             }

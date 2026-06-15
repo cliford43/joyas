@@ -7,7 +7,7 @@ $precioFinal  = (float)($prod['precio'] ?? 0) - (float)($prod['descuento'] ?? 0)
 $tieneDesc    = (float)($prod['descuento'] ?? 0) > 0;
 $sinStock     = (int)($prod['stock'] ?? 0) === 0;
 $imgSrc       = $prod['imagen_principal'] ?? null;
-$imgUrl       = $imgSrc ? '/' . ltrim($imgSrc, '/') : asset('images/placeholder-joya.jpg');
+$imgUrl       = mediaUrl($imgSrc);
 $inWishlist   = false;
 if (!empty($_SESSION['user_id']) && isset($prod['id'])) {
     // Se verifica en el controlador si se quiere rendimiento máximo
@@ -54,9 +54,9 @@ if (!empty($_SESSION['user_id']) && isset($prod['id'])) {
         </a>
       </h3>
       <div class="price-block mb-3">
-        <span class="price-current">S/ <?= number_format($precioFinal, 2) ?></span>
+        <span class="price-current"><?= formatPrice($precioFinal) ?></span>
         <?php if ($tieneDesc): ?>
-          <span class="price-original">S/ <?= number_format((float)$prod['precio'], 2) ?></span>
+          <span class="price-original"><?= formatPrice((float)$prod['precio']) ?></span>
         <?php endif; ?>
       </div>
 

@@ -32,14 +32,14 @@
             <tr style="border-bottom:1px solid #eee;">
               <td style="color:#333;"><?= htmlspecialchars($item['nombre'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
               <td style="color:#333;text-align:center;"><?= (int)($item['cantidad'] ?? 1) ?></td>
-              <td style="color:#333;text-align:right;">S/ <?= number_format((float)($item['precio_unitario'] ?? 0), 2) ?></td>
+              <td style="color:#333;text-align:right;"><?= formatPrice((float)($item['precio_unitario'] ?? 0)) ?></td>
             </tr>
             <?php endforeach; ?>
           </tbody>
         </table>
         <?php endif; ?>
         <div style="text-align:right;padding:12px 0;border-top:2px solid #D4AF37;">
-          <strong style="font-size:18px;color:#111;">Total: S/ <?= number_format((float)($total ?? 0), 2) ?></strong>
+          <strong style="font-size:18px;color:#111;">Total: <?= formatPrice((float)($total ?? 0)) ?></strong>
         </div>
         <div style="background:#F8F6F0;padding:16px;margin-top:20px;font-size:13px;color:#555;">
           <strong>Método de pago:</strong>

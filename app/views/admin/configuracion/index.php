@@ -3,8 +3,23 @@
   <h1>Configuración general</h1>
 </div>
 <div class="admin-card admin-form" style="max-width:720px;">
-  <form method="POST" action="<?= url('admin/configuracion') ?>">
+  <form method="POST" enctype="multipart/form-data" action="<?= url('admin/configuracion') ?>">
     <input type="hidden" name="_csrf_token" value="<?= $csrfToken ?>">
+
+    <h2 class="h6 text-uppercase mb-3" style="color:var(--color-gold);letter-spacing:2px;">Branding</h2>
+    <div class="row g-3 mb-4">
+      <div class="col-12">
+        <label class="form-label">Logo principal (sitio y admin)</label>
+        <input type="file" name="logo_principal" class="form-control" accept=".jpg,.jpeg,.png">
+        <div class="form-text">Formato JPG/PNG, máximo 2 MB.</div>
+      </div>
+      <?php if (!empty($config['logo_principal'])): ?>
+        <div class="col-12">
+          <img src="<?= e(mediaUrl((string)$config['logo_principal'])) ?>" alt="Logo actual"
+               style="max-height:64px;max-width:260px;object-fit:contain;border:1px solid rgba(0,0,0,.1);padding:.4rem;background:#fff;">
+        </div>
+      <?php endif; ?>
+    </div>
 
     <h2 class="h6 text-uppercase mb-3" style="color:var(--color-gold);letter-spacing:2px;">Información de la tienda</h2>
     <div class="row g-3 mb-4">
@@ -71,6 +86,109 @@
       </div>
     </div>
 
-    <button type="submit" class="btn btn-gold">Guardar configuración</button>
+    <h2 class="h6 text-uppercase mb-3" style="color:var(--color-gold);letter-spacing:2px;">Paleta General</h2>
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <label class="form-label">Marca principal</label>
+        <input type="color" name="theme_brand_primary" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_brand_primary'] ?? '', '#D4AF37')) ?>">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Marca clara</label>
+        <input type="color" name="theme_brand_primary_light" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_brand_primary_light'] ?? '', '#F5D87A')) ?>">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Marca oscura</label>
+        <input type="color" name="theme_brand_primary_dark" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_brand_primary_dark'] ?? '', '#B8961E')) ?>">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Fondo principal</label>
+        <input type="color" name="theme_base_bg" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_base_bg'] ?? '', '#FFFFFF')) ?>">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Texto principal</label>
+        <input type="color" name="theme_base_text" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_base_text'] ?? '', '#111111')) ?>">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Texto secundario</label>
+        <input type="color" name="theme_base_muted" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_base_muted'] ?? '', '#6C757D')) ?>">
+      </div>
+    </div>
+
+    <h2 class="h6 text-uppercase mb-3" style="color:var(--color-gold);letter-spacing:2px;">Menús</h2>
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <label class="form-label">Fondo menú</label>
+        <input type="color" name="theme_menu_bg" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_menu_bg'] ?? '', '#111111')) ?>">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Texto menú</label>
+        <input type="color" name="theme_menu_text" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_menu_text'] ?? '', '#FFFFFF')) ?>">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Hover/activo menú</label>
+        <input type="color" name="theme_menu_hover" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_menu_hover'] ?? '', '#D4AF37')) ?>">
+      </div>
+    </div>
+
+    <h2 class="h6 text-uppercase mb-3" style="color:var(--color-gold);letter-spacing:2px;">Botones</h2>
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <label class="form-label">Primario fondo</label>
+        <input type="color" name="theme_btn_primary_bg" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_btn_primary_bg'] ?? '', '#D4AF37')) ?>">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Primario texto</label>
+        <input type="color" name="theme_btn_primary_text" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_btn_primary_text'] ?? '', '#111111')) ?>">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Primario hover</label>
+        <input type="color" name="theme_btn_primary_hover_bg" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_btn_primary_hover_bg'] ?? '', '#B8961E')) ?>">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Texto hover</label>
+        <input type="color" name="theme_btn_primary_hover_text" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_btn_primary_hover_text'] ?? '', '#FFFFFF')) ?>">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Outline borde</label>
+        <input type="color" name="theme_btn_outline_border" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_btn_outline_border'] ?? '', '#D4AF37')) ?>">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Outline texto</label>
+        <input type="color" name="theme_btn_outline_text" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_btn_outline_text'] ?? '', '#D4AF37')) ?>">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Outline hover</label>
+        <input type="color" name="theme_btn_outline_hover_bg" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_btn_outline_hover_bg'] ?? '', '#D4AF37')) ?>">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Outline texto hover</label>
+        <input type="color" name="theme_btn_outline_hover_text" class="form-control form-control-color"
+               value="<?= e(normalizeHexColor($config['theme_btn_outline_hover_text'] ?? '', '#111111')) ?>">
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 flex-wrap">
+      <button type="submit" class="btn btn-gold">Guardar configuración</button>
+      <button type="submit" name="reset_theme" value="1" class="btn btn-outline-secondary"
+              onclick="return confirm('¿Restablecer paleta y logo a los valores por defecto?');">
+        Restablecer estilo y logo
+      </button>
+    </div>
   </form>
 </div>

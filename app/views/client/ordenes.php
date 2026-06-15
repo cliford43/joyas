@@ -38,7 +38,7 @@
                   <td>
                     <?= $o['metodo_pago'] === 'transferencia' ? 'Transferencia' : 'Contra entrega' ?>
                   </td>
-                  <td class="text-end">S/ <?= number_format((float)$o['total'], 2) ?></td>
+                  <td class="text-end"><?= formatPrice((float)$o['total']) ?></td>
                   <td>
                     <a href="<?= url('mi-cuenta/ordenes/' . $o['id']) ?>"
                        class="btn btn-sm btn-outline-gold">Ver detalle</a>

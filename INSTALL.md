@@ -83,6 +83,17 @@ Abre el navegador en: `http://viluna.test`
 - Correo: `admin@viluna.com`
 - Contraseña: `Admin123*`
 
+Si no puedes ingresar con esas credenciales (por una base importada de una versión anterior), restablece la contraseña del admin:
+
+```sql
+UPDATE usuarios
+SET password = '$2y$12$rvTiE43BKWut73VRqjvqHuAc9y9/T3suYAjBT.yhqjCEaiC4rIswm',
+    verificado = 1
+WHERE correo = 'admin@viluna.com';
+```
+
+El hash anterior corresponde a la contraseña `Admin123*`.
+
 ---
 
 ## Instalación en GoDaddy Linux (Producción)

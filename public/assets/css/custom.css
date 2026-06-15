@@ -13,6 +13,9 @@
   --color-gray:        #6C757D;
   --color-light-gray:  #F8F6F0;
   --color-white:       #FFFFFF;
+  --menu-bg:           #111111;
+  --menu-text:         #FFFFFF;
+  --menu-hover:        #D4AF37;
   --font-heading:      'Playfair Display', 'Georgia', serif;
   --font-body:         'Cormorant Garamond', 'Georgia', serif;
   --font-sans:         'Raleway', 'Helvetica Neue', sans-serif;
@@ -139,7 +142,7 @@ img { max-width: 100%; height: auto; }
 
 /* ─── Navbar ──────────────────────────────────────────────── */
 .navbar-viluna {
-  background: var(--color-black);
+  background: var(--menu-bg);
   padding: 1rem 0;
   border-bottom: 1px solid rgba(212,175,55,0.2);
   transition: all var(--transition);
@@ -150,7 +153,7 @@ img { max-width: 100%; height: auto; }
 }
 .navbar-viluna .navbar-brand img { height: 50px; }
 .navbar-viluna .nav-link {
-  color: rgba(255,255,255,0.85) !important;
+  color: var(--menu-text) !important;
   font-family: var(--font-sans);
   font-size: 0.82rem;
   font-weight: 500;
@@ -160,14 +163,18 @@ img { max-width: 100%; height: auto; }
   transition: color var(--transition);
 }
 .navbar-viluna .nav-link:hover,
-.navbar-viluna .nav-link.active { color: var(--color-gold) !important; }
+.navbar-viluna .nav-link.active { color: var(--menu-hover) !important; }
 .navbar-viluna .nav-link.active::after {
   content: '';
   display: block;
   width: 100%;
   height: 1px;
-  background: var(--color-gold);
+  background: var(--menu-hover);
   margin-top: 2px;
+}
+
+.navbar-viluna .text-white {
+  color: var(--menu-text) !important;
 }
 .cart-badge {
   background: var(--color-gold);

@@ -110,15 +110,15 @@ $beneficiario= $config['banco_beneficiario'] ?? '';
             ?>
             <div class="d-flex justify-content-between small mb-2">
               <span><?= e($item['nombre']) ?> × <?= (int)$item['cantidad'] ?></span>
-              <span>S/ <?= number_format($precioItem * (int)$item['cantidad'], 2) ?></span>
+              <span><?= formatPrice($precioItem * (int)$item['cantidad']) ?></span>
             </div>
             <?php endforeach; ?>
             <hr style="border-color:rgba(212,175,55,0.2);">
-            <div class="summary-row"><span>Subtotal</span><span>S/ <?= number_format($subtotal, 2) ?></span></div>
+            <div class="summary-row"><span>Subtotal</span><span><?= formatPrice($subtotal) ?></span></div>
             <?php if ($descCup > 0): ?>
-            <div class="summary-row text-success"><span>Descuento</span><span>-S/ <?= number_format($descCup, 2) ?></span></div>
+            <div class="summary-row text-success"><span>Descuento</span><span>-<?= formatPrice($descCup) ?></span></div>
             <?php endif; ?>
-            <div class="summary-row total-row"><span>Total</span><span>S/ <?= number_format($total, 2) ?></span></div>
+            <div class="summary-row total-row"><span>Total</span><span><?= formatPrice($total) ?></span></div>
 
             <button type="submit" class="btn btn-gold w-100 mt-4" id="submitBtn">
               <i class="bi bi-lock me-1"></i>Confirmar pedido

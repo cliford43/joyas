@@ -34,7 +34,7 @@
           <a href="<?= url('catalogo/' . $cat['slug']) ?>" class="category-card d-block text-decoration-none"
              aria-label="Ver <?= e($cat['nombre']) ?>">
             <?php if (!empty($cat['imagen'])): ?>
-              <img src="<?= e($cat['imagen']) ?>" alt="<?= e($cat['nombre']) ?>" loading="lazy">
+              <img src="<?= e(mediaUrl((string)$cat['imagen'])) ?>" alt="<?= e($cat['nombre']) ?>" loading="lazy">
             <?php else: ?>
               <div style="background:linear-gradient(135deg,#1a1a1a,#333);width:100%;height:100%;min-height:200px;"></div>
             <?php endif; ?>

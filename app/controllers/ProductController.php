@@ -56,7 +56,7 @@ class ProductController extends Controller
         }
 
         // Meta tags para SEO
-        $metaImg = $imagenPrincipal ? APP_URL . '/' . ltrim($imagenPrincipal['ruta'], '/') : '';
+        $metaImg = $imagenPrincipal ? mediaUrl((string)$imagenPrincipal['ruta']) : '';
 
         $this->render('product/show', [
             'pageTitle'       => $producto['nombre'],
