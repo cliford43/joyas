@@ -123,3 +123,5 @@ $router->get('/admin/newsletter', 'Admin\NewsletterController@index', ['auth', '
 // Configuración Admin
 $router->get('/admin/configuracion', 'Admin\ConfigController@index', ['auth', 'admin']);
 $router->post('/admin/configuracion', 'Admin\ConfigController@update', ['auth', 'admin', 'csrf']);
+$router->get('/admin/configuracion/home', 'Admin\ConfigController@homeSections', ['auth', 'admin']);
+$router->post('/admin/configuracion/home', 'Admin\ConfigController@updateHomeSections', ['auth', 'admin', 'csrf']);

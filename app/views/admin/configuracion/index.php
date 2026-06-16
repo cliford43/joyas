@@ -201,6 +201,9 @@
 
     <div class="d-flex gap-2 flex-wrap">
       <button type="submit" class="btn btn-gold">Guardar configuración</button>
+      <a href="<?= url('admin/configuracion/home') ?>" class="btn btn-outline-gold">
+        <i class="bi bi-house me-1"></i>Configurar secciones del Home
+      </a>
       <button type="submit" name="reset_theme" value="1" class="btn btn-outline-secondary"
               onclick="return confirm('¿Restablecer paleta y logo a los valores por defecto?');">
         Restablecer estilo y logo

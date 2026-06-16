@@ -158,6 +158,118 @@ class ProductModel extends Model
         );
     }
 
+    /** Retorna productos en oferta (con descuento > 0). */
+    public static function getOnSale(int $limit = 8, string $orden = 'recientes'): array
+    {
+        $orderSql = self::resolveOrder($orden);
+        return static::fetchAll(
+            "SELECT p.*, c.nombre AS categoria_nombre, c.slug AS categoria_slug
+             FROM productos p
+             JOIN categorias c ON c.id = p.categoria_id
+             WHERE p.activo = 1 AND p.descuento > 0
+             ORDER BY {$orderSql}
+             LIMIT :lim",
+            [':lim' => $limit]
+        );
+    }
+
+    /** Retorna productos más agregados a favoritos/wishlist. */
+    public static function getMostWishlisted(int $limit = 8, string $orden = 'recientes'): array
+    {
+        return static::fetchAll(
+            'SELECT p.*, c.nombre AS categoria_nombre, c.slug AS categoria_slug,
+                    COUNT(w.id) AS total_wishlist
+             FROM productos p
+             JOIN categorias c ON c.id = p.categoria_id
+             LEFT JOIN wishlist w ON w.producto_id = p.id
+             WHERE p.activo = 1
+             GROUP BY p.id
+             ORDER BY total_wishlist DESC, p.fecha_creacion DESC
+             LIMIT :lim',
+            [':lim' => $limit]
+        );
+    }
+
+    /** Retorna productos con inventario limitado (stock <= 5 y > 0). */
+    public static function getLimitedStock(int $limit = 8, string $orden = 'recientes'): array
+    {
+        $orderSql = self::resolveOrder($orden);
+        return static::fetchAll(
+            "SELECT p.*, c.nombre AS categoria_nombre, c.slug AS categoria_slug
+             FROM productos p
+             JOIN categorias c ON c.id = p.categoria_id
+             WHERE p.activo = 1 AND p.stock > 0 AND p.stock <= 5
+             ORDER BY p.stock ASC, {$orderSql}
+             LIMIT :lim",
+            [':lim' => $limit]
+        );
+    }
+
+    /** Retorna productos tendencia del mes (más vendidos en últimos 30 días). */
+    public static function getTrendingMonth(int $limit = 8): array
+    {
+        return static::fetchAll(
+            'SELECT p.*, c.nombre AS categoria_nombre, c.slug AS categoria_slug,
+                    COALESCE(SUM(od.cantidad), 0) AS ventas_mes
+             FROM productos p
+             JOIN categorias c ON c.id = p.categoria_id
+             LEFT JOIN orden_detalle od ON od.producto_id = p.id
+             LEFT JOIN ordenes o ON o.id = od.orden_id
+                 AND o.estado != "cancelada"
+                 AND o.fecha_creacion >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+             WHERE p.activo = 1
+             GROUP BY p.id
+             ORDER BY ventas_mes DESC, p.fecha_creacion DESC
+             LIMIT :lim',
+            [':lim' => $limit]
+        );
+    }
+
+    /** Retorna productos ordenados por número de vistas (si existe la columna, sino por fecha). */
+    public static function getMostViewed(int $limit = 8): array
+    {
+        // Fallback: usar fecha como proxy si no hay columna de vistas
+        return static::fetchAll(
+            'SELECT p.*, c.nombre AS categoria_nombre, c.slug AS categoria_slug
+             FROM productos p
+             JOIN categorias c ON c.id = p.categoria_id
+             WHERE p.activo = 1
+             ORDER BY p.fecha_creacion DESC
+             LIMIT :lim',
+            [':lim' => $limit]
+        );
+    }
+
+    /**
+     * Obtiene productos para una sección del home según su tipo configurado.
+     */
+    public static function getBySection(string $tipo, int $limit = 8, string $orden = 'recientes'): array
+    {
+        return match ($tipo) {
+            'bestsellers'     => self::getBestsellers($limit),
+            'new'             => self::getNew($limit),
+            'featured'        => self::getFeatured($limit),
+            'on_sale'         => self::getOnSale($limit, $orden),
+            'most_wishlisted' => self::getMostWishlisted($limit, $orden),
+            'limited_stock'   => self::getLimitedStock($limit, $orden),
+            'most_viewed'     => self::getMostViewed($limit),
+            'trending_month'  => self::getTrendingMonth($limit),
+            default           => self::getFeatured($limit),
+        };
+    }
+
+    /** Resuelve string de orden SQL. */
+    private static function resolveOrder(string $orden): string
+    {
+        return match ($orden) {
+            'antiguos'    => 'p.fecha_creacion ASC',
+            'precio_asc'  => '(p.precio - p.descuento) ASC',
+            'precio_desc' => '(p.precio - p.descuento) DESC',
+            'aleatorio'   => 'RAND()',
+            default        => 'p.fecha_creacion DESC',
+        };
+    }
+
     // ─── Buscador avanzado ────────────────────────────────────
 
     /**

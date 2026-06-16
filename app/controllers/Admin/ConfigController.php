@@ -103,4 +103,80 @@ class ConfigController extends Controller
             $this->flash('error', 'Logo no actualizado: ' . $e->getMessage());
         }
     }
+
+    // ─── Secciones del Home ──────────────────────────────────
+
+    public const HOME_SECTION_TYPES = [
+        'bestsellers'     => 'Productos más vendidos',
+        'new'             => 'Productos nuevos / recién agregados',
+        'featured'        => 'Productos destacados manualmente',
+        'on_sale'         => 'Productos en oferta',
+        'most_wishlisted' => 'Productos más agregados a favoritos',
+        'limited_stock'   => 'Productos con inventario limitado',
+        'most_viewed'     => 'Productos más vistos',
+        'trending_month'  => 'Productos tendencia del mes',
+        'categories'      => 'Categorías destacadas',
+    ];
+
+    public function homeSections(): void
+    {
+        $config = ConfigModel::getAll();
+        $sections = [];
+        for ($i = 1; $i <= 4; $i++) {
+            $sections[$i] = [
+                'titulo'      => $config["home_sec{$i}_titulo"] ?? '',
+                'descripcion' => $config["home_sec{$i}_descripcion"] ?? '',
+                'tipo'        => $config["home_sec{$i}_tipo"] ?? '',
+                'cantidad'    => $config["home_sec{$i}_cantidad"] ?? '8',
+                'activo'      => $config["home_sec{$i}_activo"] ?? '1',
+                'orden'       => $config["home_sec{$i}_orden"] ?? 'recientes',
+            ];
+        }
+
+        $this->render('admin/configuracion/home_sections', [
+            'pageTitle'   => 'Secciones de la página principal',
+            'currentPage' => 'configuracion',
+            'sections'    => $sections,
+            'tipos'       => self::HOME_SECTION_TYPES,
+        ], 'admin_layout');
+    }
+
+    public function updateHomeSections(): void
+    {
+        // Restablecer secciones a valores por defecto
+        if (!empty($_POST['reset_sections'])) {
+            $defaults = [
+                1 => ['Nuestras Colecciones', 'Encuentra la joya perfecta para cada ocasión', 'categories', '8', '1', 'recientes'],
+                2 => ['Piezas Destacadas', 'Selección especial de nuestros artesanos', 'featured', '8', '1', 'recientes'],
+                3 => ['Los Más Queridos', 'Las joyas favoritas de nuestros clientes', 'bestsellers', '8', '1', 'recientes'],
+                4 => ['Recién Llegadas', 'Las últimas incorporaciones a nuestra colección', 'new', '8', '1', 'recientes'],
+            ];
+
+            for ($i = 1; $i <= 4; $i++) {
+                ConfigModel::set("home_sec{$i}_titulo", $defaults[$i][0]);
+                ConfigModel::set("home_sec{$i}_descripcion", $defaults[$i][1]);
+                ConfigModel::set("home_sec{$i}_tipo", $defaults[$i][2]);
+                ConfigModel::set("home_sec{$i}_cantidad", $defaults[$i][3]);
+                ConfigModel::set("home_sec{$i}_activo", $defaults[$i][4]);
+                ConfigModel::set("home_sec{$i}_orden", $defaults[$i][5]);
+            }
+
+            $this->flash('success', 'Secciones restablecidas a los valores por defecto.');
+            $this->redirect(url('admin/configuracion/home'));
+            return;
+        }
+
+        for ($i = 1; $i <= 4; $i++) {
+            $prefix = "sec{$i}_";
+            ConfigModel::set("home_sec{$i}_titulo", trim($_POST[$prefix . 'titulo'] ?? ''));
+            ConfigModel::set("home_sec{$i}_descripcion", trim($_POST[$prefix . 'descripcion'] ?? ''));
+            ConfigModel::set("home_sec{$i}_tipo", trim($_POST[$prefix . 'tipo'] ?? 'bestsellers'));
+            ConfigModel::set("home_sec{$i}_cantidad", max(1, min(24, (int)($_POST[$prefix . 'cantidad'] ?? 8))));
+            ConfigModel::set("home_sec{$i}_activo", isset($_POST[$prefix . 'activo']) ? '1' : '0');
+            ConfigModel::set("home_sec{$i}_orden", trim($_POST[$prefix . 'orden'] ?? 'recientes'));
+        }
+
+        $this->flash('success', 'Secciones de la página principal actualizadas.');
+        $this->redirect(url('admin/configuracion/home'));
+    }
 }
