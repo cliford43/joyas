@@ -62,6 +62,9 @@
     <a href="<?= url('admin/productos') ?>" class="nav-link <?= ($currentPage ?? '') === 'productos' ? 'active' : '' ?>">
       <i class="bi bi-gem"></i> Productos
     </a>
+    <a href="<?= url('admin/resenas') ?>" class="nav-link <?= ($currentPage ?? '') === 'resenas' ? 'active' : '' ?>">
+      <i class="bi bi-star"></i> Reseñas
+    </a>
 
     <div class="sidebar-section">Ventas</div>
     <a href="<?= url('admin/ordenes') ?>" class="nav-link <?= ($currentPage ?? '') === 'ordenes' ? 'active' : '' ?>">

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Core\Controller;
 use App\Models\ProductModel;
 use App\Models\CategoryModel;
+use App\Models\ReviewModel;
 use App\Models\WishlistModel;
 
 /**
@@ -55,6 +56,24 @@ class ProductController extends Controller
             $inWishlist = WishlistModel::exists((int)$_SESSION['user_id'], (int)$producto['id']);
         }
 
+        // Reseñas
+        $productId    = (int)$producto['id'];
+        $reviewStats  = ReviewModel::getProductStats($productId);
+        $resenas      = ReviewModel::getApprovedByProduct($productId);
+        $userHasReview = false;
+        $canReview     = false;
+
+        if (!empty($_SESSION['user_id'])) {
+            $uid = (int)$_SESSION['user_id'];
+            $userHasReview = ReviewModel::userHasReview($uid, $productId);
+            $canReview     = !$userHasReview;
+        }
+
+        // Review form errors/old data from session
+        $reviewErrors = $_SESSION['review_errors'] ?? [];
+        $reviewOld    = $_SESSION['review_old'] ?? [];
+        unset($_SESSION['review_errors'], $_SESSION['review_old']);
+
         // Meta tags para SEO
         $metaImg = $imagenPrincipal ? mediaUrl((string)$imagenPrincipal['ruta']) : '';
 
@@ -71,6 +90,12 @@ class ProductController extends Controller
             'precioFinal'     => $precioFinal,
             'inWishlist'      => $inWishlist,
             'navCategorias'   => $navCategorias,
+            'reviewStats'     => $reviewStats,
+            'resenas'         => $resenas,
+            'userHasReview'   => $userHasReview,
+            'canReview'       => $canReview,
+            'reviewErrors'    => $reviewErrors,
+            'reviewOld'       => $reviewOld,
         ]);
     }
 }

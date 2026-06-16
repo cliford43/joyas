@@ -254,8 +254,48 @@ class ProductModel extends Model
             'limited_stock'   => self::getLimitedStock($limit, $orden),
             'most_viewed'     => self::getMostViewed($limit),
             'trending_month'  => self::getTrendingMonth($limit),
+            'top_rated'       => self::getTopRated($limit),
+            'most_reviewed'   => self::getMostReviewed($limit),
             default           => self::getFeatured($limit),
         };
+    }
+
+    /**
+     * Retorna productos mejor valorados (por promedio de reseñas aprobadas).
+     */
+    public static function getTopRated(int $limit = 8): array
+    {
+        return static::fetchAll(
+            "SELECT p.*, c.nombre AS categoria_nombre, c.slug AS categoria_slug,
+                    AVG(r.calificacion) AS promedio_calificacion
+             FROM productos p
+             JOIN categorias c ON c.id = p.categoria_id
+             JOIN resenas r ON r.producto_id = p.id AND r.estado = 'aprobado'
+             WHERE p.activo = 1
+             GROUP BY p.id
+             ORDER BY promedio_calificacion DESC, p.fecha_creacion DESC
+             LIMIT :lim",
+            [':lim' => $limit]
+        );
+    }
+
+    /**
+     * Retorna productos con más reseñas aprobadas.
+     */
+    public static function getMostReviewed(int $limit = 8): array
+    {
+        return static::fetchAll(
+            "SELECT p.*, c.nombre AS categoria_nombre, c.slug AS categoria_slug,
+                    COUNT(r.id) AS total_resenas
+             FROM productos p
+             JOIN categorias c ON c.id = p.categoria_id
+             JOIN resenas r ON r.producto_id = p.id AND r.estado = 'aprobado'
+             WHERE p.activo = 1
+             GROUP BY p.id
+             ORDER BY total_resenas DESC, p.fecha_creacion DESC
+             LIMIT :lim",
+            [':lim' => $limit]
+        );
     }
 
     /** Resuelve string de orden SQL. */

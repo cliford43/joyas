@@ -57,6 +57,26 @@ $heroDescripcion = !empty($cfg['hero_descripcion']) ? $cfg['hero_descripcion'] :
   </div>
 </section>
 
+<?php elseif ($section['tipo'] === 'testimonials'): ?>
+<?php if (!empty($section['testimonios'])): ?>
+<?php
+  $testimonios = $section['testimonios'];
+  $titulo = $section['titulo'];
+  $descripcion = $section['descripcion'];
+  include __DIR__ . '/../partials/testimonials.php';
+?>
+<?php else: ?>
+<section class="py-5 <?= $bgClass ?>" aria-labelledby="<?= $sectionId ?>">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title" id="<?= $sectionId ?>"><?= e($section['titulo']) ?></h2>
+      <p class="section-subtitle"><?= e($section['descripcion']) ?></p>
+    </div>
+    <p class="text-center text-muted">Aún no hay suficientes testimonios para mostrar esta sección. Se necesitan al menos 3 reseñas aprobadas con 4 o 5 estrellas.</p>
+  </div>
+</section>
+<?php endif; ?>
+
 <?php elseif ($section['tipo'] === 'products' && !empty($section['productos'])): ?>
 <section class="py-5 <?= $bgClass ?>" aria-labelledby="<?= $sectionId ?>">
   <div class="container">

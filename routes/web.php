@@ -11,6 +11,7 @@ $router->get('/', 'HomeController@index');
 $router->get('/catalogo', 'CatalogController@index');
 $router->get('/catalogo/{categoria}', 'CatalogController@category');
 $router->get('/producto/{slug}', 'ProductController@show');
+$router->post('/producto/{slug}/resena', 'ReviewController@store', ['auth', 'csrf']);
 $router->get('/buscar', 'SearchController@handle');
 
 // ─── SEO ──────────────────────────────────────────────────────────────────────
@@ -116,6 +117,14 @@ $router->post('/admin/cupones/crear', 'Admin\CouponController@store', ['auth', '
 $router->get('/admin/cupones/{id}/editar', 'Admin\CouponController@edit', ['auth', 'admin']);
 $router->post('/admin/cupones/{id}/editar', 'Admin\CouponController@update', ['auth', 'admin', 'csrf']);
 $router->post('/admin/cupones/{id}/toggle', 'Admin\CouponController@toggle', ['auth', 'admin', 'csrf']);
+
+// Reseñas Admin
+$router->get('/admin/resenas', 'Admin\ReviewController@index', ['auth', 'admin']);
+$router->post('/admin/resenas/{id}/aprobar', 'Admin\ReviewController@approve', ['auth', 'admin', 'csrf']);
+$router->post('/admin/resenas/{id}/rechazar', 'Admin\ReviewController@reject', ['auth', 'admin', 'csrf']);
+$router->get('/admin/resenas/{id}/editar', 'Admin\ReviewController@edit', ['auth', 'admin']);
+$router->post('/admin/resenas/{id}/editar', 'Admin\ReviewController@update', ['auth', 'admin', 'csrf']);
+$router->post('/admin/resenas/{id}/eliminar', 'Admin\ReviewController@delete', ['auth', 'admin', 'csrf']);
 
 // Newsletter Admin
 $router->get('/admin/newsletter', 'Admin\NewsletterController@index', ['auth', 'admin']);

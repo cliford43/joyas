@@ -116,6 +116,9 @@ class ConfigController extends Controller
         'most_viewed'     => 'Productos más vistos',
         'trending_month'  => 'Productos tendencia del mes',
         'categories'      => 'Categorías destacadas',
+        'top_rated'       => 'Productos mejor valorados',
+        'most_reviewed'   => 'Productos con más comentarios',
+        'testimonials'    => 'Testimonios destacados',
     ];
 
     public function homeSections(): void

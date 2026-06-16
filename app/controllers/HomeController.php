@@ -6,6 +6,7 @@ use Core\Controller;
 use App\Models\CategoryModel;
 use App\Models\ProductModel;
 use App\Models\ConfigModel;
+use App\Models\ReviewModel;
 
 /**
  * HomeController — Página principal de VILUNA.
@@ -54,6 +55,28 @@ class HomeController extends Controller
                     'descripcion' => $desc,
                     'categorias'  => $categorias,
                 ];
+                continue;
+            }
+
+            if ($tipo === 'testimonials') {
+                $testimonials = ReviewModel::getTestimonials($cantidad);
+                // Requirement 5.3: hide section if fewer than 3 approved testimonials
+                if (count($testimonials) >= 3) {
+                    $sections[] = [
+                        'tipo'         => 'testimonials',
+                        'titulo'       => $titulo,
+                        'descripcion'  => $desc,
+                        'testimonios'  => $testimonials,
+                    ];
+                } else {
+                    // Show section with empty testimonials so the view can display a placeholder
+                    $sections[] = [
+                        'tipo'         => 'testimonials',
+                        'titulo'       => $titulo,
+                        'descripcion'  => $desc,
+                        'testimonios'  => [],
+                    ];
+                }
                 continue;
             }
 

@@ -39,3 +39,9 @@ error:0A000086:SSL routines::certificate verify failed
 error:0A000086:SSL routines::certificate verify failed
 [2026-06-16 17:45:11] TO:talo43_111@hotmail.com SUBJECT:Actualización de tu orden #16 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
 error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 19:08:57] TO:talo43_111@hotmail.com SUBJECT:Orden confirmada #17 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 19:09:04] TO:talo43_111@hotmail.com SUBJECT:Actualización de tu orden #17 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 19:09:31] TO:talo43_111@hotmail.com SUBJECT:Actualización de tu orden #17 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed

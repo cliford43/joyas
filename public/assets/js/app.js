@@ -77,3 +77,66 @@ document.addEventListener('click', function (e) {
   document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
   thumb.classList.add('active');
 });
+
+// ─── Star Rating Selector (Reseñas) ──────────────────────────
+(function () {
+  const container = document.getElementById('starRatingInput');
+  const input     = document.getElementById('calificacionInput');
+  if (!container || !input) return;
+
+  const stars = container.querySelectorAll('.star-selectable');
+  let currentValue = parseInt(input.value, 10) || 0;
+
+  // Initialize from existing value (e.g. validation error reload)
+  if (currentValue > 0) {
+    fillStars(currentValue);
+  }
+
+  function fillStars(n) {
+    stars.forEach((star, idx) => {
+      if (idx < n) {
+        star.classList.remove('bi-star');
+        star.classList.add('bi-star-fill');
+        star.setAttribute('aria-checked', 'true');
+      } else {
+        star.classList.remove('bi-star-fill');
+        star.classList.add('bi-star');
+        star.setAttribute('aria-checked', 'false');
+      }
+    });
+  }
+
+  // Hover: highlight stars up to hovered
+  container.addEventListener('mouseover', function (e) {
+    const star = e.target.closest('.star-selectable');
+    if (!star) return;
+    const val = parseInt(star.dataset.value, 10);
+    fillStars(val);
+  });
+
+  // Mouse leave: revert to selected value
+  container.addEventListener('mouseleave', function () {
+    fillStars(currentValue);
+  });
+
+  // Click: set rating value
+  container.addEventListener('click', function (e) {
+    const star = e.target.closest('.star-selectable');
+    if (!star) return;
+    currentValue = parseInt(star.dataset.value, 10);
+    input.value = currentValue;
+    fillStars(currentValue);
+  });
+
+  // Keyboard support for accessibility
+  container.addEventListener('keydown', function (e) {
+    const star = e.target.closest('.star-selectable');
+    if (!star) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      currentValue = parseInt(star.dataset.value, 10);
+      input.value = currentValue;
+      fillStars(currentValue);
+    }
+  });
+})();
