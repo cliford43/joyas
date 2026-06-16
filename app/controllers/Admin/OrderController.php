@@ -4,8 +4,7 @@ namespace App\Controllers\Admin;
 
 use Core\Controller;
 use App\Models\OrderModel;
-use App\Models\UserModel;
-use Services\Mailer;
+use Services\NotificationService;
 
 class OrderController extends Controller
 {
@@ -50,24 +49,12 @@ class OrderController extends Controller
             return;
         }
 
+        $comentarios = trim($_POST['comentarios'] ?? '');
+
         OrderModel::updateStatus((int)$id, $estado);
 
-        // Notificar al cliente
-        $user = UserModel::findById((int)$orden['usuario_id']);
-        if ($user) {
-            $mailer = new Mailer();
-            $mailer->send(
-                $user['correo'],
-                'Actualización de tu orden #' . $id . ' — VILUNA',
-                'order_status',
-                [
-                    'nombre'   => $user['nombre'],
-                    'ordenId'  => $id,
-                    'estado'   => OrderModel::ESTADOS[$estado],
-                    'ordenUrl' => url('mi-cuenta/ordenes/' . $id),
-                ]
-            );
-        }
+        // Notificar al cliente del cambio de estado via NotificationService
+        NotificationService::orderStatusChanged((int)$id, $estado, $comentarios ?: null);
 
         $this->flash('success', 'Estado actualizado a: ' . OrderModel::ESTADOS[$estado]);
         $this->redirect(url('admin/ordenes/' . $id));

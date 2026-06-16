@@ -6,6 +6,7 @@ use Core\Controller;
 use App\Models\OrderModel;
 use App\Models\UserModel;
 use Services\Mailer;
+use Services\NotificationService;
 
 class PaymentController extends Controller
 {
@@ -27,6 +28,10 @@ class PaymentController extends Controller
 
         OrderModel::updateStatus($orderId, 'pagada');
         $this->notifyClient($orden, 'pagada');
+
+        // Enviar confirmación de pago al cliente y notificar al admin
+        NotificationService::paymentConfirmed($orderId);
+        NotificationService::adminPaymentReceived($orderId);
 
         $this->flash('success', 'Comprobante aprobado. Orden marcada como pagada.');
         $this->redirect(url('admin/pagos'));

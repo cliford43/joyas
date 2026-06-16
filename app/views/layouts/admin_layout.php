@@ -82,6 +82,14 @@
       <i class="bi bi-envelope-heart"></i> Newsletter
     </a>
 
+    <div class="sidebar-section">Correos</div>
+    <a href="<?= url('admin/plantillas-correo') ?>" class="nav-link <?= ($currentPage ?? '') === 'plantillas' ? 'active' : '' ?>">
+      <i class="bi bi-file-earmark-code"></i> Plantillas
+    </a>
+    <a href="<?= url('admin/correos-log') ?>" class="nav-link <?= ($currentPage ?? '') === 'correos-log' ? 'active' : '' ?>">
+      <i class="bi bi-journal-text"></i> Bitácora Correos
+    </a>
+
     <div class="sidebar-section">Gestión</div>
     <a href="<?= url('admin/usuarios') ?>" class="nav-link <?= ($currentPage ?? '') === 'usuarios' ? 'active' : '' ?>">
       <i class="bi bi-people"></i> Usuarios

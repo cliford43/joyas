@@ -6,6 +6,7 @@ use Core\Controller;
 use Core\Middleware\CsrfMiddleware;
 use App\Models\UserModel;
 use Services\Mailer;
+use Services\NotificationService;
 
 /**
  * AuthController — Registro, login, verificación y recuperación de contraseña.
@@ -71,6 +72,11 @@ class AuthController extends Controller
                 'verificarUrl'=> url("verificar/{$code}?email={$correo}"),
             ]
         );
+
+        // Enviar correo de bienvenida y notificar al admin
+        $userData = ['nombre' => $nombre, 'apellido' => $apellido, 'correo' => $correo];
+        NotificationService::welcomeEmail($userData);
+        NotificationService::adminNewUser($userData);
 
         // Guardar en sesión para el formulario de verificación
         $_SESSION['verificar_email'] = $correo;

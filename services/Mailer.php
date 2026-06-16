@@ -4,6 +4,7 @@ namespace Services;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception as MailException;
+use App\Models\EmailLogModel;
 
 /**
  * Services\Mailer — Servicio de correo transaccional usando PHPMailer.
@@ -48,21 +49,33 @@ class Mailer
             $this->mailer->Body    = $this->renderTemplate($template, $data);
             $this->mailer->AltBody = strip_tags($this->mailer->Body);
             $this->mailer->send();
+
+            // Log successful send to correos_log
+            $this->logToDatabase($to, $subject, 'enviado', null);
+
             return true;
         } catch (MailException $e) {
             $this->logError($to, $subject, $e->getMessage());
+            $this->logToDatabase($to, $subject, 'error', $e->getMessage());
             return false;
         } catch (\Throwable $e) {
             $this->logError($to, $subject, $e->getMessage());
+            $this->logToDatabase($to, $subject, 'error', $e->getMessage());
             return false;
         }
     }
 
     /**
      * Renderiza una plantilla de correo y retorna el HTML.
+     * Si $data contiene 'htmlOverride', usa ese HTML directamente (plantilla DB).
      */
     private function renderTemplate(string $template, array $data): string
     {
+        // If pre-rendered HTML from DB template is provided, use it directly
+        if (!empty($data['htmlOverride'])) {
+            return $data['htmlOverride'];
+        }
+
         extract($data, EXTR_SKIP);
         $path = (defined('APP_PATH') ? APP_PATH : dirname(__DIR__) . '/app')
               . '/views/emails/' . $template . '.php';
@@ -93,5 +106,24 @@ class Mailer
 
         // Silenciar error de escritura para no romper el flujo principal
         @file_put_contents($file, $line, FILE_APPEND | LOCK_EX);
+    }
+
+    /**
+     * Registra el envío en la tabla correos_log via EmailLogModel.
+     * Silencia cualquier excepción para no interrumpir el flujo principal.
+     */
+    private function logToDatabase(string $to, string $subject, string $estado, ?string $errorMsg): void
+    {
+        try {
+            EmailLogModel::create([
+                'destinatario'  => $to,
+                'asunto'        => $subject,
+                'estado'        => $estado,
+                'error_mensaje' => $errorMsg,
+            ]);
+        } catch (\Throwable $e) {
+            // Si la bitácora falla, registrar en archivo pero no interrumpir
+            $this->logError($to, $subject, 'DB log failed: ' . $e->getMessage());
+        }
     }
 }

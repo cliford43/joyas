@@ -9,6 +9,7 @@
   ?>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-url" content="<?= defined('APP_URL') ? APP_URL : '' ?>">
 
   <!-- SEO Meta Tags dinámicos -->
   <title><?= isset($pageTitle) ? e($pageTitle) . ' — VILUNA' : 'VILUNA — Joyería Fina' ?></title>

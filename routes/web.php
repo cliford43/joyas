@@ -129,6 +129,14 @@ $router->post('/admin/resenas/{id}/eliminar', 'Admin\ReviewController@delete', [
 // Newsletter Admin
 $router->get('/admin/newsletter', 'Admin\NewsletterController@index', ['auth', 'admin']);
 
+// Plantillas de Correo Admin
+$router->get('/admin/plantillas-correo', 'Admin\EmailTemplateController@index', ['auth', 'admin']);
+$router->get('/admin/plantillas-correo/{id}/editar', 'Admin\EmailTemplateController@edit', ['auth', 'admin']);
+$router->post('/admin/plantillas-correo/{id}/editar', 'Admin\EmailTemplateController@update', ['auth', 'admin', 'csrf']);
+
+// Bitácora de Correos Admin
+$router->get('/admin/correos-log', 'Admin\EmailLogController@index', ['auth', 'admin']);
+
 // Configuración Admin
 $router->get('/admin/configuracion', 'Admin\ConfigController@index', ['auth', 'admin']);
 $router->post('/admin/configuracion', 'Admin\ConfigController@update', ['auth', 'admin', 'csrf']);

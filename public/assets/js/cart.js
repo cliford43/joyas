@@ -8,9 +8,11 @@
 (function () {
 
   const csrfToken = document.querySelector('[name="_csrf_token"]')?.value || '';
+  const baseUrl   = document.querySelector('meta[name="base-url"]')?.content || '';
 
   // ─── Helper: petición POST AJAX ───────────────────────────
-  async function postAjax(url, body) {
+  async function postAjax(path, body) {
+    const url = baseUrl + '/' + path.replace(/^\//, '');
     const res = await fetch(url, {
       method: 'POST',
       headers: {
@@ -19,7 +21,7 @@
       },
       body: new URLSearchParams({ ...body, _csrf_token: csrfToken }).toString(),
     });
-    return res.json();
+    return res;
   }
 
   // ─── Actualizar totales en UI ──────────────────────────────
@@ -31,6 +33,7 @@
     const countEl    = document.getElementById('cartCountLabel');
     const discountRow= document.getElementById('couponDiscountRow');
     const discountEl = document.getElementById('summaryCouponDiscount');
+    const couponLabel= document.getElementById('couponLabel');
 
     if (subtotalEl) subtotalEl.textContent = fmt(data.subtotal ?? data.total);
     if (totalEl)    totalEl.textContent    = fmt(data.total);
@@ -44,7 +47,13 @@
 
     if (discountRow && data.couponDiscount > 0) {
       discountRow.style.display = '';
+      discountRow.classList.add('text-success');
+      if (couponLabel && data.codigo) {
+        couponLabel.textContent = 'Descuento (' + data.codigo + ' ' + data.porcentaje + '%)';
+      }
       if (discountEl) discountEl.textContent = '-' + fmt(data.couponDiscount);
+    } else if (discountRow && (data.couponDiscount ?? 0) === 0) {
+      discountRow.style.display = 'none';
     }
   }
 
@@ -60,15 +69,13 @@
       const qty       = parseInt(input.value);
 
       try {
-        const data = await postAjax('/carrito/actualizar', {
+        const res  = await postAjax('carrito/actualizar', {
           producto_id: productId,
           cantidad: qty,
         });
+        const data = await res.json();
 
         if (data.success) {
-          // Actualizar subtotal de la fila
-          const subtotalEl = document.getElementById('subtotal-' + productId);
-          // Recalcular visualmente (precio unitario × cantidad)
           updateSummary(data);
         } else {
           // Revertir al valor válido más cercano
@@ -76,7 +83,9 @@
           const min = parseInt(input.min);
           input.value = Math.max(min, Math.min(max, qty));
         }
-      } catch {}
+      } catch {
+        // Network error — silent fail for quantity updates
+      }
     }, 400);
   });
 
@@ -89,7 +98,8 @@
     const row       = document.getElementById('row-' + productId);
 
     try {
-      const data = await postAjax('/carrito/eliminar', { producto_id: productId });
+      const res  = await postAjax('carrito/eliminar', { producto_id: productId });
+      const data = await res.json();
 
       if (data.success) {
         if (row) {
@@ -104,7 +114,9 @@
           setTimeout(() => location.reload(), 350);
         }
       }
-    } catch {}
+    } catch {
+      // Network error — silent fail for remove
+    }
   });
 
   // ─── Aplicar cupón AJAX ────────────────────────────────────
@@ -122,8 +134,10 @@
       } else {
         applyBtn.disabled = true;
       }
+
       try {
-        const data = await postAjax('/cupon/aplicar', { codigo: code });
+        const res = await postAjax('cupon/aplicar', { codigo: code });
+        const data = await res.json();
 
         if (couponMsg) {
           couponMsg.textContent = data.message || '';
@@ -132,17 +146,18 @@
 
         if (data.success) {
           updateSummary({
-            subtotal:       data.subtotal       ?? CartModel?.getSubtotal?.() ?? 0,
-            couponDiscount: data.couponDiscount  ?? 0,
-            total:          data.total           ?? 0,
-            totalItems:     parseInt(document.getElementById('cartCountLabel')?.textContent) || 0,
+            subtotal:       data.subtotal,
+            couponDiscount: data.couponDiscount,
+            total:          data.total,
+            totalItems:     data.totalItems,
+            codigo:         data.codigo,
+            porcentaje:     data.porcentaje,
           });
-          // Recargar para mostrar el cupón aplicado en el resumen
-          setTimeout(() => location.reload(), 800);
         }
       } catch {
+        // Network/connection error — distinct from validation errors
         if (couponMsg) {
-          couponMsg.textContent = 'Error al aplicar el cupón.';
+          couponMsg.textContent = 'Error de conexión. Verifica tu internet e intenta de nuevo.';
           couponMsg.style.color = '#DC3545';
         }
       } finally {

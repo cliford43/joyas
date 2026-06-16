@@ -45,3 +45,10 @@ error:0A000086:SSL routines::certificate verify failed
 error:0A000086:SSL routines::certificate verify failed
 [2026-06-16 19:09:31] TO:talo43_111@hotmail.com SUBJECT:Actualización de tu orden #17 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
 error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 19:55:22] TO:talo43_111@hotmail.com SUBJECT:Orden confirmada #18 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 19:55:22] TO:talo43_111@hotmail.com SUBJECT:Orden confirmada #18 — VILUNA ERROR:DB log failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'viluna.correos_log' doesn't exist
+[2026-06-16 19:56:03] TO:talo43_111@hotmail.com SUBJECT:Orden confirmada #19 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 19:56:11] TO:no-reply@viluna.com SUBJECT:Nuevo pedido #19 - VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed

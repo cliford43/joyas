@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Core\Controller;
 use App\Models\ReviewModel;
 use App\Models\ProductModel;
+use Services\NotificationService;
 
 /**
  * ReviewController — Envío público de reseñas de productos.
@@ -64,13 +65,16 @@ class ReviewController extends Controller
         }
 
         // 6. Crear la reseña (sanitización se aplica dentro de ReviewModel::create)
-        ReviewModel::create([
+        $reviewId = ReviewModel::create([
             'usuario_id'  => $userId,
             'producto_id' => $productId,
             'calificacion' => (int)$data['calificacion'],
             'comentario'   => $data['comentario'],
             'ip_address'   => $_SERVER['REMOTE_ADDR'] ?? null,
         ]);
+
+        // Notificar al admin sobre la nueva reseña
+        NotificationService::adminNewReview($reviewId);
 
         // 7. Mensaje de confirmación
         $this->flash('success', 'Tu reseña ha sido enviada y está pendiente de aprobación.');

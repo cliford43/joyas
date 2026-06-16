@@ -11,6 +11,7 @@ use App\Models\CategoryModel;
 use App\Models\ConfigModel;
 use Services\FileUploader;
 use Services\Mailer;
+use Services\NotificationService;
 
 /**
  * CheckoutController — Proceso de compra: dirección, pago, confirmación.
@@ -160,6 +161,9 @@ class CheckoutController extends Controller
                 'direccion' => $direccion,
             ]
         );
+
+        // Notificar al admin sobre el nuevo pedido
+        NotificationService::adminNewOrder($orderId);
 
         // Limpiar carrito y sesión de checkout
         CartModel::clear();

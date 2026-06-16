@@ -23,9 +23,12 @@ class CouponController extends Controller
                 $this->json([
                     'success'        => true,
                     'message'        => $result['message'],
+                    'codigo'         => $result['coupon']['codigo'],
                     'porcentaje'     => $result['coupon']['porcentaje'],
+                    'subtotal'       => CartModel::getSubtotal(),
                     'couponDiscount' => CartModel::getCouponDiscount(),
                     'total'          => CartModel::calculateTotal(),
+                    'totalItems'     => CartModel::getTotalItems(),
                 ]);
             } else {
                 $this->json(['success' => false, 'message' => $result['message']], 422);
