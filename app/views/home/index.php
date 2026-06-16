@@ -1,13 +1,21 @@
-<?php /* Vista: Página principal VILUNA */ ?>
+<?php
+/* Vista: Página principal VILUNA */
+// Invalidar caché para asegurar datos frescos del hero
+unset($_SESSION['config']);
+$cfg = \App\Models\ConfigModel::getAll();
+$heroTagline     = !empty($cfg['hero_tagline']) ? $cfg['hero_tagline'] : ('Joyería fina desde ' . (date('Y') - 10));
+$heroTitulo      = !empty($cfg['hero_titulo']) ? $cfg['hero_titulo'] : 'Elegancia que perdura para siempre';
+$heroDescripcion = !empty($cfg['hero_descripcion']) ? $cfg['hero_descripcion'] : 'Descubre nuestra colección exclusiva de joyas artesanales creadas con los mejores materiales y técnicas del mundo.';
+?>
 
 <!-- ─── Hero Banner ──────────────────────────────────────────── -->
 <section class="hero-banner" aria-label="Banner principal">
   <div class="overlay"></div>
   <div class="container hero-content">
     <div class="col-lg-7">
-      <p class="tagline">Joyería fina desde <?= date('Y') - 10 ?></p>
-      <h1>Elegancia que<br><span>perdura para siempre</span></h1>
-      <p>Descubre nuestra colección exclusiva de joyas artesanales creadas con los mejores materiales y técnicas del mundo.</p>
+      <p class="tagline"><?= e($heroTagline) ?></p>
+      <h1><?= nl2br(e($heroTitulo)) ?></h1>
+      <p><?= e($heroDescripcion) ?></p>
       <div class="d-flex gap-3 flex-wrap">
         <a href="<?= url('catalogo') ?>" class="btn btn-gold">Explorar colección</a>
         <a href="<?= url('catalogo/anillos') ?>" class="btn btn-outline-gold">Ver anillos</a>
@@ -103,7 +111,7 @@
 <?php endif; ?>
 
 <!-- ─── Banner informativo ───────────────────────────────────── -->
-<section class="py-5" style="background:var(--color-black);">
+<!--<section class="py-5" style="background:var(--color-black);">
   <div class="container">
     <div class="row g-4 text-center">
       <div class="col-md-4">
@@ -123,4 +131,4 @@
       </div>
     </div>
   </div>
-</section>
+</section>-->

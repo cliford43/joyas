@@ -120,7 +120,7 @@ $beneficiario= $config['banco_beneficiario'] ?? '';
             <?php endif; ?>
             <div class="summary-row total-row"><span>Total</span><span><?= formatPrice($total) ?></span></div>
 
-            <button type="submit" class="btn btn-gold w-100 mt-4" id="submitBtn">
+            <button type="submit" class="btn btn-gold w-100 mt-4" id="submitBtn" data-loading-text="Confirmando...">
               <i class="bi bi-lock me-1"></i>Confirmar pedido
             </button>
           </div>

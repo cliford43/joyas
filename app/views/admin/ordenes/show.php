@@ -63,7 +63,7 @@
             <option value="<?= $k ?>" <?= $orden['estado'] === $k ? 'selected' : '' ?>><?= e($v) ?></option>
           <?php endforeach; ?>
         </select>
-        <button type="submit" class="btn btn-gold btn-sm w-100">Actualizar estado</button>
+        <button type="submit" class="btn btn-gold btn-sm w-100" data-loading-text="Actualizando...">Actualizar estado</button>
       </form>
     </div>
   </div>

@@ -16,8 +16,8 @@ class SearchController extends Controller
         $filters = [
             'q'           => trim($_GET['q']           ?? ''),
             'categoria'   => trim($_GET['categoria']   ?? ''),
-            'precio_min'  => $_GET['precio_min']  !== '' ? (float)$_GET['precio_min']  : null,
-            'precio_max'  => $_GET['precio_max']  !== '' ? (float)$_GET['precio_max']  : null,
+            'precio_min'  => isset($_GET['precio_min']) && $_GET['precio_min'] !== '' ? (float)$_GET['precio_min']  : null,
+            'precio_max'  => isset($_GET['precio_max']) && $_GET['precio_max'] !== '' ? (float)$_GET['precio_max']  : null,
             'orden'       => trim($_GET['orden']       ?? 'mas_recientes'),
             'con_descuento' => !empty($_GET['con_descuento']) ? 1 : 0,
         ];

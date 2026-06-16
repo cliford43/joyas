@@ -54,6 +54,22 @@
       </div>
     </div>
 
+    <h2 class="h6 text-uppercase mb-3" style="color:var(--color-gold);letter-spacing:2px;">Texto del Hero (Página principal)</h2>
+    <div class="row g-3 mb-4">
+      <div class="col-12">
+        <label class="form-label">Tagline</label>
+        <input type="text" name="hero_tagline" class="form-control" placeholder="Joyería fina desde 2016" value="<?= e($config['hero_tagline'] ?? '') ?>">
+      </div>
+      <div class="col-12">
+        <label class="form-label">Título principal</label>
+        <input type="text" name="hero_titulo" class="form-control" placeholder="Elegancia que perdura para siempre" value="<?= e($config['hero_titulo'] ?? '') ?>">
+      </div>
+      <div class="col-12">
+        <label class="form-label">Descripción</label>
+        <textarea name="hero_descripcion" class="form-control" rows="2" placeholder="Descubre nuestra colección exclusiva..."><?= e($config['hero_descripcion'] ?? '') ?></textarea>
+      </div>
+    </div>
+
     <h2 class="h6 text-uppercase mb-3" style="color:var(--color-gold);letter-spacing:2px;">Redes sociales</h2>
     <div class="row g-3 mb-4">
       <div class="col-md-6">

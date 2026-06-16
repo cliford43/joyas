@@ -102,7 +102,7 @@ $total   = $summary['total']          ?? 0;
             <form method="POST" action="<?= url('carrito/vaciar') ?>"
                   data-confirm="¿Vaciar todo el carrito?">
               <input type="hidden" name="_csrf_token" value="<?= $csrfToken ?>">
-              <button type="submit" class="btn btn-outline-danger btn-sm">
+              <button type="submit" class="btn btn-outline-danger btn-sm" data-loading-text="Vaciando...">
                 <i class="bi bi-trash me-1"></i>Vaciar carrito
               </button>
             </form>

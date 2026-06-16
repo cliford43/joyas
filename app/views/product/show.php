@@ -107,7 +107,7 @@ $imgUrl      = mediaUrl($imgPrincipal);
               <input type="number" name="cantidad" value="1" min="1"
                      max="<?= (int)$producto['stock'] ?>"
                      class="qty-input" aria-label="Cantidad" style="width:70px;">
-              <button type="submit" class="btn btn-gold">
+              <button type="submit" class="btn btn-gold" data-loading-text="Agregando...">
                 <i class="bi bi-bag-plus me-1"></i>Agregar al carrito
               </button>
             </form>

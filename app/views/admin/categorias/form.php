@@ -34,6 +34,6 @@
              <?= (!isset($old) && isset($categoria) ? $categoria['activo'] : ($old['activo'] ?? 1)) ? 'checked' : '' ?>>
       <label class="form-check-label" for="activo">Activo</label>
     </div>
-    <button type="submit" class="btn btn-gold"><?= $categoria ? 'Actualizar' : 'Crear' ?></button>
+    <button type="submit" class="btn btn-gold" data-loading-text="Guardando..."><?= $categoria ? 'Actualizar' : 'Crear' ?></button>
   </form>
 </div>

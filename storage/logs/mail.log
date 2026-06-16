@@ -15,3 +15,27 @@
 [2026-06-16 14:11:56] TO:admin@viluna.com SUBJECT:Actualización de tu orden #7 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Failed to connect to server
 [2026-06-16 14:13:24] TO:admin@viluna.com SUBJECT:Orden confirmada #8 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Failed to connect to server
 [2026-06-16 14:14:05] TO:admin@viluna.com SUBJECT:Actualización de tu orden #8 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Failed to connect to server
+[2026-06-16 17:05:55] TO:admin@viluna.com SUBJECT:Orden confirmada #9 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 17:07:38] TO:admin@viluna.com SUBJECT:Actualización de tu orden #9 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 17:07:53] TO:admin@viluna.com SUBJECT:Actualización de tu orden #9 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 17:17:33] TO:admin@viluna.com SUBJECT:Orden confirmada #10 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 17:17:45] TO:admin@viluna.com SUBJECT:Actualización de tu orden #10 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 17:18:11] TO:admin@viluna.com SUBJECT:Actualización de tu orden #10 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 17:24:15] TO:admin@viluna.com SUBJECT:Actualización de tu orden #10 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 17:37:39] TO:talo43_111@hotmail.com SUBJECT:Verifica tu cuenta VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 17:44:14] TO:admin@viluna.com SUBJECT:Orden confirmada #11 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 17:44:55] TO:admin@viluna.com SUBJECT:Actualización de tu orden #11 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 17:45:02] TO:talo43_111@hotmail.com SUBJECT:Orden confirmada #16 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed
+[2026-06-16 17:45:11] TO:talo43_111@hotmail.com SUBJECT:Actualización de tu orden #16 — VILUNA ERROR:SMTP Error: Could not connect to SMTP host. Connection failed. stream_socket_enable_crypto(): SSL operation failed with code 1. OpenSSL Error messages:
+error:0A000086:SSL routines::certificate verify failed

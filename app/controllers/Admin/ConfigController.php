@@ -59,6 +59,7 @@ class ConfigController extends Controller
             'facebook', 'instagram', 'banco_nombre', 'banco_cuenta',
             'banco_tipo', 'banco_beneficiario', 'metadescripcion',
             'slogan', 'whatsapp_mensaje',
+            'hero_tagline', 'hero_titulo', 'hero_descripcion',
             'theme_brand_primary', 'theme_brand_primary_light', 'theme_brand_primary_dark',
             'theme_base_bg', 'theme_base_text', 'theme_base_muted',
             'theme_menu_bg', 'theme_menu_text', 'theme_menu_hover',

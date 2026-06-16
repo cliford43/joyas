@@ -24,7 +24,7 @@
 
   // ─── Actualizar totales en UI ──────────────────────────────
   function updateSummary(data) {
-    const fmt = v => 'S/ ' + parseFloat(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const fmt = v => 'Q ' + parseFloat(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
     const subtotalEl = document.getElementById('summarySubtotal');
     const totalEl    = document.getElementById('summaryTotal');
@@ -117,7 +117,11 @@
       const code  = input?.value.trim().toUpperCase();
       if (!code) return;
 
-      applyBtn.disabled = true;
+      if (typeof window.startLoading === 'function') {
+        window.startLoading(applyBtn, 'Aplicando...');
+      } else {
+        applyBtn.disabled = true;
+      }
       try {
         const data = await postAjax('/cupon/aplicar', { codigo: code });
 
@@ -142,7 +146,11 @@
           couponMsg.style.color = '#DC3545';
         }
       } finally {
-        applyBtn.disabled = false;
+        if (typeof window.stopLoading === 'function') {
+          window.stopLoading(applyBtn);
+        } else {
+          applyBtn.disabled = false;
+        }
       }
     });
 

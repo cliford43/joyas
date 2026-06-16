@@ -140,6 +140,27 @@ img { max-width: 100%; height: auto; }
   color: var(--color-gold-light);
 }
 
+/* ─── Button Loading State ────────────────────────────────── */
+.btn-loading {
+  opacity: 0.65;
+  cursor: not-allowed;
+  pointer-events: none;
+  position: relative;
+}
+.btn-loading .spinner-border {
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+  vertical-align: -0.125em;
+  border: 0.15em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinner-border 0.75s linear infinite;
+}
+@keyframes spinner-border {
+  to { transform: rotate(360deg); }
+}
+
 /* ─── Navbar ──────────────────────────────────────────────── */
 .navbar-viluna {
   background: var(--menu-bg);

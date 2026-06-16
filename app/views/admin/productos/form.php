@@ -94,7 +94,7 @@
       <?php endif; ?>
 
       <div class="col-12">
-        <button type="submit" class="btn btn-gold"><?= $producto ? 'Actualizar' : 'Crear' ?></button>
+        <button type="submit" class="btn btn-gold" data-loading-text="Guardando..."><?= $producto ? 'Actualizar' : 'Crear' ?></button>
       </div>
     </div>
   </form>
