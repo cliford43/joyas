@@ -48,7 +48,7 @@ if (!empty($_SESSION['user_id']) && isset($prod['id'])) {
     <!-- Info -->
     <div class="card-body d-flex flex-column">
       <div class="category-tag"><?= e($prod['categoria_nombre'] ?? '') ?></div>
-      <h3 class="card-title flex-grow-1">
+      <h3 class="card-title">
         <a href="<?= url('producto/' . ($prod['slug'] ?? '')) ?>" class="text-decoration-none text-black">
           <?= e($prod['nombre'] ?? '') ?>
         </a>
@@ -60,18 +60,20 @@ if (!empty($_SESSION['user_id']) && isset($prod['id'])) {
         <?php endif; ?>
       </div>
 
-      <?php if (!$sinStock): ?>
-        <form method="POST" action="<?= url('carrito/agregar') ?>">
-          <input type="hidden" name="_csrf_token" value="<?= $csrfToken ?? '' ?>">
-          <input type="hidden" name="producto_id" value="<?= (int)$prod['id'] ?>">
-          <input type="hidden" name="cantidad" value="1">
-          <button type="submit" class="btn btn-dark-viluna w-100 btn-sm">
-            <i class="bi bi-bag-plus me-1"></i>Agregar
-          </button>
-        </form>
-      <?php else: ?>
-        <button class="btn btn-secondary w-100 btn-sm" disabled>Sin stock</button>
-      <?php endif; ?>
+      <div class="product-card-cta">
+        <?php if (!$sinStock): ?>
+          <form method="POST" action="<?= url('carrito/agregar') ?>">
+            <input type="hidden" name="_csrf_token" value="<?= $csrfToken ?? '' ?>">
+            <input type="hidden" name="producto_id" value="<?= (int)$prod['id'] ?>">
+            <input type="hidden" name="cantidad" value="1">
+            <button type="submit" class="btn btn-dark-viluna w-100 btn-sm">
+              <i class="bi bi-bag-plus me-1"></i>Agregar
+            </button>
+          </form>
+        <?php else: ?>
+          <button class="btn btn-secondary w-100 btn-sm" disabled>Sin stock</button>
+        <?php endif; ?>
+      </div>
     </div>
   </article>
 </div>

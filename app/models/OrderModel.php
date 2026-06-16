@@ -233,10 +233,50 @@ class OrderModel extends Model
             throw new \InvalidArgumentException("Estado inválido: {$estado}");
         }
 
-        static::execute(
-            'UPDATE ordenes SET estado = :estado WHERE id = :id',
-            [':estado' => $estado, ':id' => $orderId]
-        );
+        static::beginTransaction();
+
+        try {
+            $current = static::fetchOne(
+                'SELECT estado FROM ordenes WHERE id = :id LIMIT 1',
+                [':id' => $orderId]
+            );
+
+            if (!$current) {
+                throw new \RuntimeException('Orden no encontrada.');
+            }
+
+            $estadoActual = (string)($current['estado'] ?? '');
+
+            static::execute(
+                'UPDATE ordenes SET estado = :estado WHERE id = :id',
+                [':estado' => $estado, ':id' => $orderId]
+            );
+
+            // Al cancelar una orden no cancelada, devolver sus unidades al inventario.
+            if ($estado === 'cancelada' && $estadoActual !== 'cancelada') {
+                $items = static::fetchAll(
+                    'SELECT producto_id, cantidad FROM orden_detalle WHERE orden_id = :id',
+                    [':id' => $orderId]
+                );
+
+                foreach ($items as $item) {
+                    static::execute(
+                        'UPDATE productos SET stock = stock + :qty WHERE id = :id',
+                        [
+                            ':qty' => (int)($item['cantidad'] ?? 0),
+                            ':id'  => (int)($item['producto_id'] ?? 0),
+                        ]
+                    );
+                }
+            }
+
+            static::commit();
+        } catch (\Throwable $e) {
+            if (static::getDb()->inTransaction()) {
+                static::rollback();
+            }
+            throw $e;
+        }
     }
 
     /** Guarda la ruta del comprobante de transferencia. */
