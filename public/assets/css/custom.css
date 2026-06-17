@@ -161,41 +161,141 @@ img { max-width: 100%; height: auto; }
   to { transform: rotate(360deg); }
 }
 
-/* ─── Navbar ──────────────────────────────────────────────── */
-.navbar-viluna {
-  background: var(--menu-bg);
-  padding: 1rem 0;
+/* ─── Header / Navbar ──────────────────────────────────────── */
+.viluna-header {
+  background: var(--menu-bg, #111111);
+  z-index: 1050;
   border-bottom: 1px solid rgba(212,175,55,0.2);
-  transition: all var(--transition);
 }
-.navbar-viluna.scrolled {
-  padding: 0.5rem 0;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+.viluna-logo-bar {
+  padding: 0.75rem 0;
 }
-.navbar-viluna .navbar-brand img { height: 50px; }
-.navbar-viluna .nav-link {
-  color: var(--menu-text) !important;
-  font-family: var(--font-sans);
-  font-size: 0.82rem;
-  font-weight: 500;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 0.5rem 1rem !important;
+.viluna-logo img {
+  height: 70px;
+  width: auto;
+  display: block;
+}
+.viluna-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+.viluna-header-actions a,
+.viluna-header-actions .dropdown-toggle {
+  color: var(--menu-text, rgba(255,255,255,0.85));
+  font-size: 1.15rem;
+  text-decoration: none;
   transition: color var(--transition);
 }
-.navbar-viluna .nav-link:hover,
-.navbar-viluna .nav-link.active { color: var(--menu-hover) !important; }
-.navbar-viluna .nav-link.active::after {
-  content: '';
-  display: block;
-  width: 100%;
-  height: 1px;
-  background: var(--menu-hover);
-  margin-top: 2px;
+.viluna-header-actions a:hover,
+.viluna-header-actions .dropdown-toggle:hover {
+  color: var(--menu-hover, var(--color-gold));
+}
+.viluna-header-actions .dropdown {
+  position: relative;
+  z-index: 1070;
+}
+.viluna-header-actions .dropdown-menu {
+  background: var(--color-black);
+  border: 1px solid rgba(212,175,55,0.3);
+  border-radius: 0;
+  padding: 0.5rem 0;
+  min-width: 180px;
+}
+.viluna-header-actions .dropdown-menu .dropdown-item {
+  color: rgba(255,255,255,0.8);
+  font-size: 0.85rem;
+  padding: 0.5rem 1.2rem;
+  letter-spacing: 1px;
+}
+.viluna-header-actions .dropdown-menu .dropdown-item:hover {
+  background: rgba(212,175,55,0.1);
+  color: var(--color-gold);
+}
+.viluna-header-actions .dropdown-menu .dropdown-item.text-warning {
+  color: var(--color-gold) !important;
+}
+.viluna-header-actions .dropdown-menu .dropdown-item.text-danger {
+  color: #DC3545 !important;
+}
+.viluna-header-actions .dropdown-menu .dropdown-divider {
+  border-color: rgba(212,175,55,0.2);
 }
 
-.navbar-viluna .text-white {
-  color: var(--menu-text) !important;
+/* Hamburguesa siempre visible */
+.viluna-hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+  z-index: 1060;
+}
+.viluna-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--color-gold);
+  transition: all 0.3s ease;
+}
+.viluna-hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.viluna-hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.viluna-hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Menu overlay fullscreen */
+.viluna-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17,17,17,0.97);
+  z-index: 1040;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.viluna-menu-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.viluna-menu-content {
+  text-align: center;
+  padding: 2rem;
+}
+.viluna-menu-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+}
+.viluna-menu-content ul li {
+  margin: 0.25rem 0;
+}
+.viluna-menu-content ul li a {
+  color: rgba(255,255,255,0.85);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  text-decoration: none;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  transition: color var(--transition);
+  display: inline-block;
+  padding: 0.3rem 0;
+}
+.viluna-menu-content ul li a:hover {
+  color: var(--color-gold);
+}
+.viluna-menu-footer {
+  max-width: 280px;
+  margin: 0 auto;
 }
 .cart-badge {
   background: var(--color-gold);
@@ -211,22 +311,15 @@ img { max-width: 100%; height: auto; }
 .hero-banner {
   position: relative;
   min-height: 85vh;
-  background: linear-gradient(135deg, var(--color-black) 0%, #2A2A2A 100%);
   display: flex;
   align-items: center;
   overflow: hidden;
 }
 .hero-banner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url('/assets/images/hero-bg.jpg') center/cover no-repeat;
-  opacity: 0.3;
+  display: none;
 }
 .hero-banner .overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right, rgba(17,17,17,0.9) 40%, transparent);
+  display: none;
 }
 .hero-content {
   position: relative;

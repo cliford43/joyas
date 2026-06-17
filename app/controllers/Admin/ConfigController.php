@@ -42,14 +42,19 @@ class ConfigController extends Controller
     {
         if (!empty($_POST['reset_theme'])) {
             $oldLogo = str_replace('\\', '/', ConfigModel::get('logo_principal', ''));
+            $oldHero = str_replace('\\', '/', ConfigModel::get('hero_imagen', ''));
             ConfigModel::setMany(self::DEFAULT_THEME);
             ConfigModel::set('logo_principal', '');
+            ConfigModel::set('hero_imagen', '');
 
             if ($oldLogo !== '' && str_starts_with($oldLogo, 'uploads/branding/')) {
                 FileUploader::delete($oldLogo);
             }
+            if ($oldHero !== '' && str_starts_with($oldHero, 'uploads/hero/')) {
+                FileUploader::delete($oldHero);
+            }
 
-            $this->flash('success', 'Paleta y logo restablecidos a los valores por defecto.');
+            $this->flash('success', 'Paleta, logo e imagen hero restablecidos a los valores por defecto.');
             $this->redirect(url('admin/configuracion'));
             return;
         }
@@ -59,7 +64,7 @@ class ConfigController extends Controller
             'facebook', 'instagram', 'banco_nombre', 'banco_cuenta',
             'banco_tipo', 'banco_beneficiario', 'metadescripcion',
             'slogan', 'whatsapp_mensaje',
-            'hero_tagline', 'hero_titulo', 'hero_descripcion',
+            'hero_tagline', 'hero_titulo', 'hero_descripcion', 'hero_fondo_color',
             'theme_brand_primary', 'theme_brand_primary_light', 'theme_brand_primary_dark',
             'theme_base_bg', 'theme_base_text', 'theme_base_muted',
             'theme_menu_bg', 'theme_menu_text', 'theme_menu_hover',
@@ -77,6 +82,7 @@ class ConfigController extends Controller
         ConfigModel::setMany($data);
 
         $this->handleLogoUpload();
+        $this->handleHeroImageUpload();
 
         $this->flash('success', 'Configuración guardada.');
         $this->redirect(url('admin/configuracion'));
@@ -101,6 +107,28 @@ class ConfigController extends Controller
             }
         } catch (\InvalidArgumentException $e) {
             $this->flash('error', 'Logo no actualizado: ' . $e->getMessage());
+        }
+    }
+
+    private function handleHeroImageUpload(): void
+    {
+        if (empty($_FILES['hero_imagen']['name'])) {
+            return;
+        }
+
+        $destDir = defined('UPLOAD_PATH') ? UPLOAD_PATH . '/hero' : ROOT_PATH . '/uploads/hero';
+
+        try {
+            $newPath = FileUploader::uploadProductImage($_FILES['hero_imagen'], $destDir);
+            $oldPath = str_replace('\\', '/', ConfigModel::get('hero_imagen', ''));
+
+            ConfigModel::set('hero_imagen', $newPath);
+
+            if ($oldPath !== '' && str_starts_with($oldPath, 'uploads/hero/')) {
+                FileUploader::delete($oldPath);
+            }
+        } catch (\InvalidArgumentException $e) {
+            $this->flash('error', 'Imagen hero no actualizada: ' . $e->getMessage());
         }
     }
 

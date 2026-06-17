@@ -21,6 +21,33 @@
       <?php endif; ?>
     </div>
 
+    <h2 class="h6 text-uppercase mb-3" style="color:var(--color-gold);letter-spacing:2px;">Imagen Hero (Página principal)</h2>
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <label class="form-label">Color de fondo del banner hero</label>
+        <div class="d-flex align-items-center gap-2">
+          <input type="color" name="hero_fondo_color" class="form-control form-control-color"
+                 value="<?= e($config['hero_fondo_color'] ?? '#111111') ?>"
+                 style="width:50px;height:38px;">
+          <input type="text" name="hero_fondo_color_text" class="form-control" style="max-width:120px;"
+                 value="<?= e($config['hero_fondo_color'] ?? '#111111') ?>"
+                 placeholder="#111111" pattern="^#[0-9A-Fa-f]{6}$">
+          <div class="form-text">Hex color del fondo del banner principal.</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Imagen junto al texto del hero</label>
+        <?php if (!empty($config['hero_imagen'])): ?>
+          <div class="mb-2">
+            <img src="/<?= e(ltrim($config['hero_imagen'], '/')) ?>" alt="Hero actual"
+                 style="max-height:120px;border:var(--border-gold);border-radius:4px;">
+          </div>
+        <?php endif; ?>
+        <input type="file" name="hero_imagen" class="form-control" accept=".jpg,.jpeg,.png">
+        <div class="form-text">JPG o PNG, máximo 2 MB.</div>
+      </div>
+    </div>
+
     <h2 class="h6 text-uppercase mb-3" style="color:var(--color-gold);letter-spacing:2px;">Información de la tienda</h2>
     <div class="row g-3 mb-4">
       <div class="col-md-6">
@@ -211,3 +238,22 @@
     </div>
   </form>
 </div>
+
+<script>
+// Sincronizar input color con input texto del hero fondo
+(function(){
+  const colorInput = document.querySelector('[name="hero_fondo_color"]');
+  const textInput = document.querySelector('[name="hero_fondo_color_text"]');
+  if(!colorInput||!textInput) return;
+  colorInput.addEventListener('input', function(){ textInput.value = this.value; });
+  textInput.addEventListener('input', function(){
+    if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) colorInput.value = this.value;
+  });
+  // Al enviar, copiar el valor del color picker al campo real
+  colorInput.closest('form').addEventListener('submit', function(){
+    if(textInput.value && /^#[0-9A-Fa-f]{6}$/.test(textInput.value)){
+      colorInput.value = textInput.value;
+    }
+  });
+})();
+</script>

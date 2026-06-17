@@ -7,16 +7,28 @@ $heroDescripcion = !empty($cfg['hero_descripcion']) ? $cfg['hero_descripcion'] :
 ?>
 
 <!-- ─── Hero Banner ──────────────────────────────────────────── -->
-<section class="hero-banner" aria-label="Banner principal">
+<?php
+$heroImage = !empty($cfg['hero_imagen']) ? '/' . ltrim($cfg['hero_imagen'], '/') : asset('images/hero-default.jpg');
+$heroBgColor = !empty($cfg['hero_fondo_color']) ? $cfg['hero_fondo_color'] : '#111111';
+?>
+<section class="hero-banner" aria-label="Banner principal" style="background:<?= e($heroBgColor) ?>;">
   <div class="overlay"></div>
   <div class="container hero-content">
-    <div class="col-lg-7">
-      <p class="tagline"><?= e($heroTagline) ?></p>
-      <h1><?= nl2br(e($heroTitulo)) ?></h1>
-      <p><?= e($heroDescripcion) ?></p>
-      <div class="d-flex gap-3 flex-wrap">
-        <a href="<?= url('catalogo') ?>" class="btn btn-gold">Explorar colección</a>
-        <a href="<?= url('catalogo/anillos') ?>" class="btn btn-outline-gold">Ver anillos</a>
+    <div class="row align-items-center g-5">
+      <!-- Texto -->
+      <div class="col-lg-6">
+        <p class="tagline"><?= e($heroTagline) ?></p>
+        <h1><?= nl2br(e($heroTitulo)) ?></h1>
+        <p><?= e($heroDescripcion) ?></p>
+        <div class="d-flex gap-3 flex-wrap">
+          <a href="<?= url('catalogo') ?>" class="btn btn-gold">Explorar colección</a>
+          <a href="<?= url('catalogo/anillos') ?>" class="btn btn-outline-gold">Ver anillos</a>
+        </div>
+      </div>
+      <!-- Imagen Hero (configurable desde Admin → Configuración) -->
+      <div class="col-lg-6 d-none d-lg-block text-center">
+        <img src="<?= e($heroImage) ?>" alt="Joyería VILUNA" class="hero-product-img"
+             style="max-height:480px;width:auto;max-width:100%;filter:drop-shadow(0 20px 40px rgba(212,175,55,0.3));border-radius:8px;object-fit:cover;">
       </div>
     </div>
   </div>

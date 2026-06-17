@@ -7,10 +7,6 @@
 SET FOREIGN_KEY_CHECKS = 0;
 SET NAMES utf8mb4;
 
-DROP DATABASE IF EXISTS viluna;
-CREATE DATABASE viluna
-    CHARACTER SET utf8mb4
-    COLLATE utf8mb4_unicode_ci;
 
 USE viluna;
 

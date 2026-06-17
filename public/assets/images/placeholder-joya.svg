@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#F8F6F0"/>
+  <polygon points="200,80 260,160 200,240 140,160" fill="none" stroke="#D4AF37" stroke-width="2" opacity="0.4"/>
+  <text x="200" y="290" font-family="Georgia,serif" font-size="14" fill="#BFBFBF" text-anchor="middle" letter-spacing="3">SIN IMAGEN</text>
+</svg>
