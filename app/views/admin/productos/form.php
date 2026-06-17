@@ -68,17 +68,31 @@
           <?php foreach ($imagenes as $img): ?>
             <div class="img-item">
               <img src="<?= e(mediaUrl((string)$img['ruta'])) ?>" alt="imagen">
-              <form method="POST" action="<?= url('admin/productos/' . $producto['id'] . '/imagen/eliminar') ?>"
-                    data-confirm="¿Eliminar esta imagen?">
-                <input type="hidden" name="_csrf_token" value="<?= $csrfToken ?>">
-                <input type="hidden" name="image_id" value="<?= (int)$img['id'] ?>">
-                <button class="remove-img" type="submit" aria-label="Eliminar imagen">&times;</button>
-              </form>
+              <button class="remove-img" type="button"
+                      data-delete-url="<?= url('admin/productos/' . $producto['id'] . '/imagen/eliminar') ?>"
+                      data-image-id="<?= (int)$img['id'] ?>"
+                      data-csrf="<?= $csrfToken ?>"
+                      aria-label="Eliminar imagen">&times;</button>
             </div>
           <?php endforeach; ?>
         </div>
       </div>
       <?php endif; ?>
+
+<script>
+document.querySelectorAll('.remove-img[data-delete-url]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    if (!confirm('¿Eliminar esta imagen?')) return;
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = this.dataset.deleteUrl;
+    form.innerHTML = '<input type="hidden" name="_csrf_token" value="'+this.dataset.csrf+'">'
+                   + '<input type="hidden" name="image_id" value="'+this.dataset.imageId+'">';
+    document.body.appendChild(form);
+    form.submit();
+  });
+});
+</script>
 
       <!-- Subir nuevas imágenes -->
       <?php $puedeSubir = count($imagenes ?? []) < 10; ?>

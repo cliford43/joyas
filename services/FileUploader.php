@@ -97,8 +97,9 @@ class FileUploader
 
         // 7. Retornar ruta relativa desde la raíz del proyecto
         $rootPath = defined('ROOT_PATH') ? ROOT_PATH : dirname(__DIR__);
-        $relativePath = ltrim(str_replace($rootPath, '', $destPath), DIRECTORY_SEPARATOR);
-        return str_replace('\\', '/', $relativePath);
+        $relativePath = str_replace($rootPath, '', $destPath);
+        $relativePath = str_replace('\\', '/', $relativePath);
+        return ltrim($relativePath, '/');
     }
 
     /**
