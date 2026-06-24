@@ -1,7 +1,7 @@
 <?php
 /**
- * Partial: Navbar principal de VILUNA
- * Diseño: Logo centrado arriba + menú hamburguesa siempre (móvil y escritorio)
+ * Partial: Header VILUNA
+ * Logo grande centrado arriba + menú horizontal debajo (hamburguesa solo en móvil)
  */
 $cartCount = isset($_SESSION['cart']) ? array_sum(array_column($_SESSION['cart'], 'cantidad')) : 0;
 $isLoggedIn = !empty($_SESSION['user_id']);
@@ -9,22 +9,15 @@ $isAdmin = ($isLoggedIn && ($_SESSION['user_rol'] ?? '') === 'admin');
 $logoSrc = $logoPrincipalUrl ?? asset('images/logo.svg');
 ?>
 
-<!-- Barra superior: Logo centrado -->
 <header class="viluna-header fixed-top" id="mainNav">
-  <!-- Logo arriba centrado -->
+  <!-- Fila 1: Logo centrado grande + iconos derecha -->
   <div class="viluna-logo-bar">
-    <div class="container d-flex align-items-center justify-content-between">
-      <!-- Hamburguesa izquierda -->
-      <button class="viluna-hamburger" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-
-      <!-- Logo centro -->
+    <div class="container d-flex align-items-center justify-content-center position-relative">
+      <!-- Logo centrado -->
       <a href="<?= url() ?>" class="viluna-logo">
         <img src="<?= e($logoSrc) ?>" alt="VILUNA Joyería">
       </a>
-
-      <!-- Acciones derecha -->
+      <!-- Iconos derecha (absoluto) -->
       <div class="viluna-header-actions">
         <a href="<?= url('buscar') ?>" aria-label="Buscar"><i class="bi bi-search"></i></a>
         <a href="<?= url('carrito') ?>" class="position-relative" aria-label="Carrito">
@@ -56,50 +49,35 @@ $logoSrc = $logoPrincipalUrl ?? asset('images/logo.svg');
       </div>
     </div>
   </div>
-</header>
 
-<!-- Menú desplegable (overlay) -->
-<div class="viluna-menu-overlay" id="menuOverlay">
-  <nav class="viluna-menu-content" aria-label="Navegación principal">
-    <ul>
-      <li><a href="<?= url() ?>">Inicio</a></li>
-      <li><a href="<?= url('catalogo') ?>">Catálogo</a></li>
-      <?php if (!empty($navCategorias)):
-        foreach ($navCategorias as $cat): ?>
-          <li><a href="<?= url('catalogo/' . $cat['slug']) ?>"><?= e($cat['nombre']) ?></a></li>
-      <?php endforeach; endif; ?>
-    </ul>
-    <div class="viluna-menu-footer">
-      <?php if (!$isLoggedIn): ?>
-        <a href="<?= url('login') ?>" class="btn btn-gold w-100">Ingresar</a>
-        <a href="<?= url('registro') ?>" class="btn btn-outline-gold w-100 mt-2">Crear cuenta</a>
-      <?php else: ?>
-        <a href="<?= url('mi-cuenta') ?>" class="btn btn-outline-gold w-100">Mi cuenta</a>
-      <?php endif; ?>
+  <!-- Fila 2: Menú horizontal (visible en desktop, hamburguesa en móvil) -->
+  <nav class="viluna-nav-bar" aria-label="Navegación principal">
+    <div class="container">
+      <!-- Hamburguesa solo en móvil -->
+      <button class="viluna-mobile-toggle d-lg-none" id="mobileMenuToggle" aria-label="Abrir menú">
+        <i class="bi bi-list"></i>
+      </button>
+      <!-- Links -->
+      <ul class="viluna-nav-links" id="navLinks">
+        <li><a href="<?= url() ?>">Inicio</a></li>
+        <li><a href="<?= url('catalogo') ?>">Catálogo</a></li>
+        <?php if (!empty($navCategorias)):
+          foreach ($navCategorias as $cat): ?>
+            <li><a href="<?= url('catalogo/' . $cat['slug']) ?>"><?= e($cat['nombre']) ?></a></li>
+        <?php endforeach; endif; ?>
+      </ul>
     </div>
   </nav>
-</div>
+</header>
 
 <script>
 (function(){
-  const btn = document.getElementById('menuToggle');
-  const overlay = document.getElementById('menuOverlay');
-  const header = document.getElementById('mainNav');
-  if(!btn||!overlay) return;
+  var btn = document.getElementById('mobileMenuToggle');
+  var nav = document.getElementById('navLinks');
+  if(!btn||!nav) return;
   btn.addEventListener('click', function(){
-    const open = overlay.classList.toggle('open');
-    btn.classList.toggle('active', open);
-    btn.setAttribute('aria-expanded', open);
-    document.body.style.overflow = open ? 'hidden' : '';
-  });
-  // Cerrar al hacer clic en un link
-  overlay.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('click', function(){
-      overlay.classList.remove('open');
-      btn.classList.remove('active');
-      btn.setAttribute('aria-expanded','false');
-      document.body.style.overflow = '';
-    });
+    nav.classList.toggle('open');
+    btn.querySelector('i').className = nav.classList.contains('open') ? 'bi bi-x-lg' : 'bi bi-list';
   });
 })();
 </script>

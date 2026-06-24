@@ -64,7 +64,8 @@ class ConfigController extends Controller
             'facebook', 'instagram', 'banco_nombre', 'banco_cuenta',
             'banco_tipo', 'banco_beneficiario', 'metadescripcion',
             'slogan', 'whatsapp_mensaje',
-            'hero_tagline', 'hero_titulo', 'hero_descripcion', 'hero_fondo_color',
+            'hero_tagline', 'hero_titulo', 'hero_descripcion', 'hero_fondo_color', 'hero_activo',
+            'cards_por_fila', 'cards_por_fila_catalogo', 'cards_por_fila_busqueda', 'cards_por_fila_wishlist',
             'theme_brand_primary', 'theme_brand_primary_light', 'theme_brand_primary_dark',
             'theme_base_bg', 'theme_base_text', 'theme_base_muted',
             'theme_menu_bg', 'theme_menu_text', 'theme_menu_hover',
@@ -76,6 +77,18 @@ class ConfigController extends Controller
         foreach ($allowed as $key) {
             if (isset($_POST[$key])) {
                 $data[$key] = trim($_POST[$key]);
+            }
+        }
+
+        // Checkbox hero_activo: si no viene en POST, es '0'
+        $data['hero_activo'] = isset($_POST['hero_activo']) ? '1' : '0';
+
+        // Validar cards_por_fila: solo permitir valores válidos
+        $validCardsPerRow = ['2', '3', '4', '6'];
+        $cardsKeys = ['cards_por_fila', 'cards_por_fila_catalogo', 'cards_por_fila_busqueda', 'cards_por_fila_wishlist'];
+        foreach ($cardsKeys as $ck) {
+            if (isset($data[$ck]) && !in_array($data[$ck], $validCardsPerRow, true)) {
+                unset($data[$ck]); // discard invalid value
             }
         }
 
@@ -155,12 +168,13 @@ class ConfigController extends Controller
         $sections = [];
         for ($i = 1; $i <= 4; $i++) {
             $sections[$i] = [
-                'titulo'      => $config["home_sec{$i}_titulo"] ?? '',
-                'descripcion' => $config["home_sec{$i}_descripcion"] ?? '',
-                'tipo'        => $config["home_sec{$i}_tipo"] ?? '',
-                'cantidad'    => $config["home_sec{$i}_cantidad"] ?? '8',
-                'activo'      => $config["home_sec{$i}_activo"] ?? '1',
-                'orden'       => $config["home_sec{$i}_orden"] ?? 'recientes',
+                'titulo'        => $config["home_sec{$i}_titulo"] ?? '',
+                'descripcion'   => $config["home_sec{$i}_descripcion"] ?? '',
+                'tipo'          => $config["home_sec{$i}_tipo"] ?? '',
+                'cantidad'      => $config["home_sec{$i}_cantidad"] ?? '8',
+                'activo'        => $config["home_sec{$i}_activo"] ?? '1',
+                'orden'         => $config["home_sec{$i}_orden"] ?? 'recientes',
+                'cards_por_fila'=> $config["home_sec{$i}_cards_por_fila"] ?? '4',
             ];
         }
 
@@ -190,6 +204,7 @@ class ConfigController extends Controller
                 ConfigModel::set("home_sec{$i}_cantidad", $defaults[$i][3]);
                 ConfigModel::set("home_sec{$i}_activo", $defaults[$i][4]);
                 ConfigModel::set("home_sec{$i}_orden", $defaults[$i][5]);
+                ConfigModel::set("home_sec{$i}_cards_por_fila", '4');
             }
 
             $this->flash('success', 'Secciones restablecidas a los valores por defecto.');
@@ -205,6 +220,12 @@ class ConfigController extends Controller
             ConfigModel::set("home_sec{$i}_cantidad", max(1, min(24, (int)($_POST[$prefix . 'cantidad'] ?? 8))));
             ConfigModel::set("home_sec{$i}_activo", isset($_POST[$prefix . 'activo']) ? '1' : '0');
             ConfigModel::set("home_sec{$i}_orden", trim($_POST[$prefix . 'orden'] ?? 'recientes'));
+            // Validar y guardar cards_por_fila por sección
+            $cardsVal = trim($_POST[$prefix . 'cards_por_fila'] ?? '4');
+            if (!in_array($cardsVal, ['2', '3', '4', '6'], true)) {
+                $cardsVal = '4';
+            }
+            ConfigModel::set("home_sec{$i}_cards_por_fila", $cardsVal);
         }
 
         $this->flash('success', 'Secciones de la página principal actualizadas.');

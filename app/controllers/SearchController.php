@@ -48,6 +48,7 @@ class SearchController extends Controller
         // Si es petición AJAX → retornar JSON con HTML parcial
         if ($this->isAjax()) {
             ob_start();
+            $cardSection = 'busqueda';
             include APP_PATH . '/views/catalog/partials/products_grid.php';
             $html = ob_get_clean();
 
@@ -75,6 +76,7 @@ class SearchController extends Controller
             'pages'        => $pages,
             'currentPage'  => $page,
             'precioError'  => $precioError,
+            'cardSection'  => 'busqueda',
         ]);
     }
 }

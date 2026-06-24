@@ -236,3 +236,13 @@ body.admin-body {
   .admin-main { margin-left: 0; }
   .admin-sidebar-toggle { display: block; }
 }
+
+/* Config action bar — always visible below tabs */
+.config-action-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 1.25rem 0 0;
+  margin-top: 1.5rem;
+  border-top: 1px solid #dee2e6;
+}

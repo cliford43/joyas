@@ -165,17 +165,21 @@ img { max-width: 100%; height: auto; }
 .viluna-header {
   background: var(--menu-bg, #111111);
   z-index: 1050;
-  border-bottom: 1px solid rgba(212,175,55,0.2);
 }
 .viluna-logo-bar {
-  padding: 0.75rem 0;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(212,175,55,0.15);
 }
 .viluna-logo img {
-  height: 70px;
+  height: 90px;
   width: auto;
   display: block;
 }
 .viluna-header-actions {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
   gap: 1.2rem;
@@ -222,80 +226,60 @@ img { max-width: 100%; height: auto; }
   border-color: rgba(212,175,55,0.2);
 }
 
-/* Hamburguesa siempre visible */
-.viluna-hamburger {
-  background: none;
-  border: none;
-  cursor: pointer;
+/* Menú horizontal debajo del logo */
+.viluna-nav-bar {
+  border-bottom: 1px solid rgba(212,175,55,0.2);
+  padding: 0.4rem 0;
+}
+.viluna-nav-bar .container {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 8px;
-  z-index: 1060;
-}
-.viluna-hamburger span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--color-gold);
-  transition: all 0.3s ease;
-}
-.viluna-hamburger.active span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-.viluna-hamburger.active span:nth-child(2) {
-  opacity: 0;
-}
-.viluna-hamburger.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
-
-/* Menu overlay fullscreen */
-.viluna-menu-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(17,17,17,0.97);
-  z-index: 1040;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.35s ease;
+  position: relative;
 }
-.viluna-menu-overlay.open {
-  opacity: 1;
-  pointer-events: all;
-}
-.viluna-menu-content {
-  text-align: center;
-  padding: 2rem;
-}
-.viluna-menu-content ul {
+.viluna-nav-links {
   list-style: none;
   padding: 0;
-  margin: 0 0 2rem;
+  margin: 0;
+  display: flex;
+  gap: 0.2rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-.viluna-menu-content ul li {
-  margin: 0.25rem 0;
-}
-.viluna-menu-content ul li a {
-  color: rgba(255,255,255,0.85);
+.viluna-nav-links li a {
+  color: var(--menu-text, rgba(255,255,255,0.8));
   font-family: var(--font-sans);
-  font-size: 0.9rem;
-  text-decoration: none;
-  letter-spacing: 3px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 2px;
   text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.5rem 0.9rem;
+  display: block;
   transition: color var(--transition);
-  display: inline-block;
-  padding: 0.3rem 0;
 }
-.viluna-menu-content ul li a:hover {
+.viluna-nav-links li a:hover {
+  color: var(--menu-hover, var(--color-gold));
+}
+.viluna-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
   color: var(--color-gold);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0.3rem;
 }
-.viluna-menu-footer {
-  max-width: 280px;
-  margin: 0 auto;
+@media (max-width: 991px) {
+  .viluna-mobile-toggle { display: block; position: absolute; left: 0; }
+  .viluna-nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+  .viluna-nav-links.open { display: flex; }
+  .viluna-nav-bar .container { flex-wrap: wrap; }
 }
 .cart-badge {
   background: var(--color-gold);

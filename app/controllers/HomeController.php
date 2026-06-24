@@ -93,6 +93,7 @@ class HomeController extends Controller
                 'titulo'      => $titulo,
                 'descripcion' => $desc,
                 'productos'   => $productos,
+                'cards_por_fila' => $config["home_sec{$i}_cards_por_fila"] ?? '4',
             ];
         }
 

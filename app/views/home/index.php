@@ -6,11 +6,13 @@ $heroTitulo      = !empty($cfg['hero_titulo']) ? $cfg['hero_titulo'] : 'Eleganci
 $heroDescripcion = !empty($cfg['hero_descripcion']) ? $cfg['hero_descripcion'] : 'Descubre nuestra colección exclusiva de joyas artesanales creadas con los mejores materiales y técnicas del mundo.';
 ?>
 
-<!-- ─── Hero Banner ──────────────────────────────────────────── -->
+<!-- ─── Hero Banner (configurable: activar/desactivar desde Admin) ── -->
 <?php
+$heroActivo = ($cfg['hero_activo'] ?? '1') === '1';
 $heroImage = !empty($cfg['hero_imagen']) ? '/' . ltrim($cfg['hero_imagen'], '/') : asset('images/hero-default.jpg');
 $heroBgColor = !empty($cfg['hero_fondo_color']) ? $cfg['hero_fondo_color'] : '#111111';
 ?>
+<?php if ($heroActivo): ?>
 <section class="hero-banner" aria-label="Banner principal" style="background:<?= e($heroBgColor) ?>;">
   <div class="overlay"></div>
   <div class="container hero-content">
@@ -37,6 +39,7 @@ $heroBgColor = !empty($cfg['hero_fondo_color']) ? $cfg['hero_fondo_color'] : '#1
     Descubre
   </div>
 </section>
+<?php endif; /* hero_activo */ ?>
 
 <!-- ─── Secciones dinámicas ──────────────────────────────────── -->
 <?php foreach ($sections as $idx => $section): ?>
@@ -98,6 +101,7 @@ $heroBgColor = !empty($cfg['hero_fondo_color']) ? $cfg['hero_fondo_color'] : '#1
     </div>
     <div class="row g-4">
       <?php foreach ($section['productos'] as $prod): ?>
+        <?php $cardSection = 'home_sec'; $_homeSectionCards = $section['cards_por_fila'] ?? '4'; ?>
         <?php include __DIR__ . '/../partials/product_card.php'; ?>
       <?php endforeach; ?>
     </div>

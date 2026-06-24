@@ -14,7 +14,17 @@ if (!empty($_SESSION['user_id']) && isset($prod['id'])) {
     // Aquí dejamos el estado inicial en false para el ícono
 }
 ?>
-<div class="col-6 col-md-4 col-xl-3">
+<?php
+// $cardSection can be set by the including view to pick per-section config
+// Valid values: 'home_sec' (uses $_homeSectionCards directly), 'catalogo', 'busqueda', 'wishlist'
+if (isset($cardSection) && $cardSection === 'home_sec') {
+    $colClass = cardColumnClass($_homeSectionCards ?? '4');
+} else {
+    $_sectionKey = isset($cardSection) ? 'cards_por_fila_' . $cardSection : 'cards_por_fila_catalogo';
+    $colClass = cardColumnClass(\App\Models\ConfigModel::get($_sectionKey, '4'));
+}
+?>
+<div class="<?= $colClass ?>">
   <article class="product-card h-100">
     <!-- Badges -->
     <?php if ($sinStock): ?>

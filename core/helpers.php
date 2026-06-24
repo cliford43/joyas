@@ -231,3 +231,20 @@ if (!function_exists('sanitizeEmail')) {
         return filter_var($clean, FILTER_VALIDATE_EMAIL) ? $clean : null;
     }
 }
+
+if (!function_exists('cardColumnClass')) {
+    /**
+     * Retorna clases de columna Bootstrap para tarjetas de producto
+     * según el valor de configuración cards_por_fila.
+     */
+    function cardColumnClass(string|int $cardsPerRow = 4): string
+    {
+        return match ((string)$cardsPerRow) {
+            '2' => 'col-6',
+            '3' => 'col-6 col-md-4',
+            '4' => 'col-6 col-md-4 col-xl-3',
+            '6' => 'col-6 col-md-4 col-lg-2',
+            default => 'col-6 col-md-4 col-xl-3',
+        };
+    }
+}

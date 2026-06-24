@@ -268,6 +268,7 @@ $imgUrl      = mediaUrl($imgPrincipal);
       <h2 class="section-title text-start mb-4" style="display:block;">También te puede interesar</h2>
       <div class="row g-4">
         <?php foreach ($relacionados as $prod): ?>
+          <?php $cardSection = 'catalogo'; ?>
           <?php include APP_PATH . '/views/partials/product_card.php'; ?>
         <?php endforeach; ?>
       </div>

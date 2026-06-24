@@ -48,6 +48,15 @@
                  min="1" max="24" value="<?= (int)($sec['cantidad'] ?? 8) ?>">
         </div>
         <div class="col-md-4">
+          <label class="form-label">Tarjetas por fila</label>
+          <select name="sec<?= $i ?>_cards_por_fila" class="form-select">
+            <option value="2" <?= ($sec['cards_por_fila'] ?? '4') === '2' ? 'selected' : '' ?>>2 por fila</option>
+            <option value="3" <?= ($sec['cards_por_fila'] ?? '4') === '3' ? 'selected' : '' ?>>3 por fila</option>
+            <option value="4" <?= ($sec['cards_por_fila'] ?? '4') === '4' ? 'selected' : '' ?>>4 por fila</option>
+            <option value="6" <?= ($sec['cards_por_fila'] ?? '4') === '6' ? 'selected' : '' ?>>6 por fila</option>
+          </select>
+        </div>
+        <div class="col-md-4">
           <label class="form-label">Orden</label>
           <select name="sec<?= $i ?>_orden" class="form-select">
             <option value="recientes" <?= ($sec['orden'] ?? '') === 'recientes' ? 'selected' : '' ?>>Más recientes</option>

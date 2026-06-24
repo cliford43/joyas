@@ -42,6 +42,7 @@ class CatalogController extends Controller
             'pages'         => (int)ceil($total / $perPage),
             'currentPage'   => $page,
             'precioError'   => false,
+            'cardSection'   => 'catalogo',
         ]);
     }
 
@@ -85,6 +86,7 @@ class CatalogController extends Controller
             'pages'           => (int)ceil($total / $perPage),
             'currentPage'     => $page,
             'precioError'     => false,
+            'cardSection'     => 'catalogo',
         ]);
     }
 

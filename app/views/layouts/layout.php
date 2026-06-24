@@ -46,7 +46,7 @@
   <?php require APP_PATH . '/views/partials/navbar.php'; ?>
 
   <!-- Espacio para header fijo -->
-  <div style="height:90px;" aria-hidden="true"></div>
+  <div style="height:160px;" aria-hidden="true"></div>
 
   <!-- Flash messages -->
   <?php if (!empty($_SESSION['flash_success'])): ?>
